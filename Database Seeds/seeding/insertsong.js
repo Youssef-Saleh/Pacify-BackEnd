@@ -7,15 +7,15 @@ var songs = [
     new Song({
         Name: "Ana Ayesh",
         year: 2003,
-        userid:[],
-        ratecount: 0,
+        userId:[],
+        rateCount: 0,
         rating: 0
     }),
     new Song({
         Name: "Mel bedaya",
         year: 2019,
-        userid:[],
-        ratecount: 0,
+        userId:[],
+        rateCount: 0,
         rating: 0
     })
 ];

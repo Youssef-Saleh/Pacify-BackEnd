@@ -6,7 +6,8 @@ var schema = new Schema({
     year: {type: Number, required: true},
     rateCount:{type:Number,default:0},
     rating: {type: Number, default: 0},
-    timesplayed: {type: Number, default: 0}
+    timesPlayed: {type: Number, default: 0},
+    userId:{type: Array}
 });
 
 module.exports = mongoose.model('Song', schema);

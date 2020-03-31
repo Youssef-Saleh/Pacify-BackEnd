@@ -6,7 +6,7 @@ var schema = new Schema({
     Name: {type: String, required: true},
     year: {type: Number, required: true},
     timesPlayed: {type: Number, default: 0},
-    userid:[]
+    userId:[]
 });
 
 module.exports = mongoose.model('Album', schema);

@@ -12,9 +12,10 @@ var users = [
       gender: "Male",
       birthdate: "October 13, 2019",
       phone: "01111545885",
-      Albumid:[],
-      Songid:[],
-      likedArtist:[]
+      likedArtists:[],
+      likedAlbums:[],
+      likedSongs: [],
+      followers:[]
     }),
     new User({
         email: "goto@admin.com",
@@ -24,9 +25,10 @@ var users = [
         gender: "Male",
         birthdate: "October 13, 2019",
         phone: "01111545885",
-        Albumid:[],
-        Songid:[],
-        likedArtist:[]
+        likedArtists:[],
+        likedAlbums:[],
+        likedSongs: [],
+        followers:[]
       }),
    
 ];
