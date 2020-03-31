@@ -2,8 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    Name: {type: String, required: true},
+    name: {type: String, required: true},
     year: {type: Number, required: true},
+    genre: {type: String, required: true},
+    artist: {type: String, required: true},
     rateCount:{type:Number,default:0},
     rating: {type: Number, default: 0},
     timesPlayed: {type: Number, default: 0},
