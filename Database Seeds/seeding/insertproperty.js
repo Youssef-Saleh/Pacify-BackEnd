@@ -4,6 +4,9 @@ var mongoose = require ('mongoose');
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
 var properties = [
+    //////////////////////////////////////////////////
+    ///genres
+
     new Property({
         Name: "Arabic",
         type: "Genre"
@@ -75,6 +78,55 @@ var properties = [
     new Property({
         Name: "TV&Movies",
         type: "Genre"
+    }),
+
+    //////////////////////////////////////////////////
+    ///moods
+
+    new Property({
+        Name: "Angry",
+        type: "mood"
+
+    }),
+    new Property({
+        Name: "Bright",
+        type: "mood"
+    }),
+    new Property({
+        Name: "Calm",
+        type: "mood"
+
+    }),
+    new Property({
+        Name: "Dark",
+        type: "mood"
+    }),
+    new Property({
+        Name: "Dramatic",
+        type: "mood"
+
+    }),
+    new Property({
+        Name: "Funky",
+        type: "mood"
+    }),
+    new Property({
+        Name: "Happy",
+        type: "mood"
+
+    }),
+    new Property({
+        Name: "Inspirational",
+        type: "mood"
+    }),
+    new Property({
+        Name: "Romantic",
+        type: "mood"
+
+    }),
+    new Property({
+        Name: "Sad",
+        type: "mood"
     }),
 ];
 
