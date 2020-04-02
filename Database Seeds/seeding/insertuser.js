@@ -13,7 +13,6 @@ var users = [
         nickname: "Editingmaster",
         type: "Artist",
         gender: "Male",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -23,7 +22,6 @@ var users = [
         nickname: "Shaloos",
         type: "Artist",
         gender: "Male",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -33,7 +31,6 @@ var users = [
         nickname: "Abdobeatz",
         type: "Artist",
         gender: "Male",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -42,7 +39,6 @@ var users = [
         nickname: "Bensound",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -51,7 +47,6 @@ var users = [
         nickname: "BizBazStudio",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -60,7 +55,6 @@ var users = [
         nickname: "CheeseCakeDude",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -69,7 +63,6 @@ var users = [
         nickname: "Density&Time",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -78,7 +71,6 @@ var users = [
         nickname: "DiamondOrtiz",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -87,7 +79,6 @@ var users = [
         nickname: "EdiVilla",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -96,7 +87,6 @@ var users = [
         nickname: "JinglePunks",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -105,7 +95,6 @@ var users = [
         nickname: "Network415",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -114,7 +103,6 @@ var users = [
         nickname: "OtisMcDonald",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -123,7 +111,6 @@ var users = [
         nickname: "Ramzoid",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -132,7 +119,6 @@ var users = [
         nickname: "Riot",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -141,7 +127,6 @@ var users = [
         nickname: "SilentPartner",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),new User({
         email: "SpazzCardigan@artist.pacify",
@@ -149,7 +134,6 @@ var users = [
         nickname: "SpazzCardigan",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -158,7 +142,6 @@ var users = [
         nickname: "The126ers",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -167,7 +150,6 @@ var users = [
         nickname: "Tubebackr",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -176,7 +158,6 @@ var users = [
         nickname: "VibeTracks",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
     new User({
@@ -185,7 +166,6 @@ var users = [
         nickname: "FromSoftware-Darksouls3",
         type: "Artist",
         gender: "unknown",
-        birthdate: "unknown",
         phone: "unknown",
     }),
 

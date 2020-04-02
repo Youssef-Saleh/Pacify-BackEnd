@@ -8,75 +8,75 @@ var properties = [
     ///genres
 
     new Property({
-        Name: "Arabic",
+        name: "Arabic",
         type: "Genre"
 
     }),
     new Property({
-        Name: "Blues",
+        name: "Blues",
         type: "Genre"
     }),
     new Property({
-        Name: "Chill",
-        type: "Genre"
-
-    }),
-    new Property({
-        Name: "Classical",
-        type: "Genre"
-    }),
-    new Property({
-        Name: "Country",
+        name: "Chill",
         type: "Genre"
 
     }),
     new Property({
-        Name: "Electronic",
+        name: "Classical",
         type: "Genre"
     }),
     new Property({
-        Name: "Gaming",
-        type: "Genre"
-
-    }),
-    new Property({
-        Name: "HipHop",
-        type: "Genre"
-    }),
-    new Property({
-        Name: "Jazz",
+        name: "Country",
         type: "Genre"
 
     }),
     new Property({
-        Name: "Kids",
+        name: "Electronic",
         type: "Genre"
     }),
     new Property({
-        Name: "Pop",
-        type: "Genre"
-
-    }),
-    new Property({
-        Name: "Punk",
-        type: "Genre"
-    }),
-    new Property({
-        Name: "R&B",
+        name: "Gaming",
         type: "Genre"
 
     }),
     new Property({
-        Name: "Rock",
+        name: "HipHop",
         type: "Genre"
     }),
     new Property({
-        Name: "Travel",
+        name: "Jazz",
         type: "Genre"
 
     }),
     new Property({
-        Name: "TV&Movies",
+        name: "Kids",
+        type: "Genre"
+    }),
+    new Property({
+        name: "Pop",
+        type: "Genre"
+
+    }),
+    new Property({
+        name: "Punk",
+        type: "Genre"
+    }),
+    new Property({
+        name: "R&B",
+        type: "Genre"
+
+    }),
+    new Property({
+        name: "Rock",
+        type: "Genre"
+    }),
+    new Property({
+        name: "Travel",
+        type: "Genre"
+
+    }),
+    new Property({
+        name: "TV&Movies",
         type: "Genre"
     }),
 
@@ -84,48 +84,48 @@ var properties = [
     ///moods
 
     new Property({
-        Name: "Angry",
+        name: "Angry",
         type: "mood"
 
     }),
     new Property({
-        Name: "Bright",
+        name: "Bright",
         type: "mood"
     }),
     new Property({
-        Name: "Calm",
-        type: "mood"
-
-    }),
-    new Property({
-        Name: "Dark",
-        type: "mood"
-    }),
-    new Property({
-        Name: "Dramatic",
+        name: "Calm",
         type: "mood"
 
     }),
     new Property({
-        Name: "Funky",
+        name: "Dark",
         type: "mood"
     }),
     new Property({
-        Name: "Happy",
-        type: "mood"
-
-    }),
-    new Property({
-        Name: "Inspirational",
-        type: "mood"
-    }),
-    new Property({
-        Name: "Romantic",
+        name: "Dramatic",
         type: "mood"
 
     }),
     new Property({
-        Name: "Sad",
+        name: "Funky",
+        type: "mood"
+    }),
+    new Property({
+        name: "Happy",
+        type: "mood"
+
+    }),
+    new Property({
+        name: "Inspirational",
+        type: "mood"
+    }),
+    new Property({
+        name: "Romantic",
+        type: "mood"
+
+    }),
+    new Property({
+        name: "Sad",
         type: "mood"
     }),
 ];

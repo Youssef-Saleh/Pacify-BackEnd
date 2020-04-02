@@ -5,11 +5,11 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 var playlists = [
     new Playlist({
-        Name: "Liked songs",
+        name: "Liked songs",
         type: "liked"
     }),
     new Playlist({
-        Name: "Rock",
+        name: "Rock",
         type: "Library"
     })
 ];
