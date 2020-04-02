@@ -10,12 +10,11 @@ var schema = new Schema({
     activated: {type: Boolean, default: false},
     birthdate: {type: Date, required: true},
     joindate:{type: Date, default: Date.now()},
-    phone: {type: String},
-    likedAlbums:{type: Array},
-    likedSongs: {type:Array},
-    likedArtists: {type:Array},
-    followers:{type: Array}
-
+    phone: {type: String, required: true},
+    likedAlbums:{type: Array, default: []},
+    likedSongs: {type:Array, default: []},
+    likedArtists: {type:Array, default: []},
+    followers:{type: Array, default: []},
 });
 
 module.exports = mongoose.model('User', schema);
