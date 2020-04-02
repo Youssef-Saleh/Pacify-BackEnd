@@ -7,6 +7,10 @@ const songSchema = new schema({
     type: String,
     required: true
   },
+  region: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'property'
+  },
   timesPlayed: {
     type: Number,
     default: 0

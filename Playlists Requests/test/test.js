@@ -15,22 +15,9 @@ describe('Playlist', () => {
    * Test Create Playlist
    */
   describe('Create Playlist', () => {
-    it('it should not create playlist whithout a name given', (done) => {
-      let playlist = {};
-      chai.request(index)
-      .post('/')
-      .send(playlist)
-      .end((err, res) => {
-        res.should.have.status(422);
-        res.body.should.be.a('object');
-        res.body.should.have.property('Failed').eql('Error');
-        done();
-      });
-    });
-
-    it('It should create a playlist', (done) => {
+    it('In case of no name given, it names the playlist "New Playlist"', (done) => {
       let playlist = {
-        name: "newPlaylist"
+        name: ""
       };
       chai.request(index)
       .post('/')
@@ -38,7 +25,22 @@ describe('Playlist', () => {
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('object');
-        res.body.should.have.property('message').eql('Created');
+        res.body.should.have.property('name').eql('New Playlist');
+        done();
+      });
+    });
+
+    it('It should create a playlist with the name given', (done) => {
+      let playlist = {
+        name: "myPlaylist"
+      };
+      chai.request(index)
+      .post('/')
+      .send(playlist)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('name').eql(playlist.name);
         done();
       });
     });
@@ -48,18 +50,17 @@ describe('Playlist', () => {
    * Test Get Playlist
    */
   describe('Get Playlist', () => {
-    it('It should get a playlist by its id', (done) => {
+    it('It should return playlist songs\' IDs', (done) => {
       let playlist = new playlistModel({
-        name: "newPlaylist"
+        name: "myPlaylist"
       });
       playlistModel.create(playlist);
       chai.request(index)
-      .get('/playlist/' + playlist.id)
+      .get('/collection/playlist/' + playlist.id)
       .send(playlist)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.body.should.have.property('_id').eql(playlist.id);
+        res.body.should.be.a('array');
         done();
       });
     });
@@ -69,9 +70,9 @@ describe('Playlist', () => {
    * Test Like Playlist
    */
   describe('Like Playlist', () => {
-    it('It adds the id of a playlist to the user and the id of him/her to the playlist', (done, userToken) => {
+    it('It likes the playlist', (done, userToken) => {
       let playlist = new playlistModel({
-        name: "newPlaylist"
+        name: "myPlaylist"
       });
       let user = new userModel({
         name: "Sherif"
@@ -87,6 +88,29 @@ describe('Playlist', () => {
         res.should.have.status(200);
         res.body.should.be.a('object');
         res.body.should.have.property('message').eql('Liked');
+        done();
+      });
+    });
+
+    it('It unlikes the playlist', (done, userToken) => {
+      let playlist = new playlistModel({
+        name: "myPlaylist"
+      });
+      playlistModel.create(playlist);
+      let user = new userModel({
+        name: "Sherif",
+        likedPlaylists: [playlist._id]
+      });
+      userModel.create(user);
+      userToken = jwt.sign({users: user}, 'secret');
+      chai.request(index)
+      .put('/playlist/'+ playlist.id)
+      .set('Authorization', 'Bearer ' + userToken)
+      .send(playlist)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('message').eql('Unliked');
         done();
       });
     });
