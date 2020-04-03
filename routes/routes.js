@@ -1,4 +1,5 @@
 const loginRoutes = require('./login');
+const browseRoutes = require('./browse');
 
 const appRouter = (app, fs) => {
     app.get('/', (req, res) => {
@@ -7,6 +8,7 @@ const appRouter = (app, fs) => {
 
 
     loginRoutes(app, fs);
+    browseRoutes(app, fs);
     
 };
 
