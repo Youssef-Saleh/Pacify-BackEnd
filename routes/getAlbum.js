@@ -15,26 +15,21 @@ const fs = require('fs');
 // including handling JSON data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-const Album = require('../Database Seeds/models/album');
+var Album = require('../Database Seeds/models/album');
 
-const getAlbumSongsRoutes = (app, fs) => {
-    app.get('/getAlbumSongs', (req, res) => {
+const getAlbumRoutes = (app, fs) => {
+    // showing the liked albums
+    app.get('/album/:albumId', (req, res) => {
         mongoose.connection.db.collection('albums',function(err, collection){
-            if (err){
-                throw err;
-            }
-            collection.find({_id:new ObjectId(req.body.albumId)}).toArray(function(err,docs){
+             collection.find({_id:new ObjectId(req.params.albumId)}).toArray(function(err,docs){
+                    if (err) {
+                        throw err;
 
-                if (err){
-                    throw err;
-
-                }
-                arr = []
-                arr=docs[0].songs
-                res.send(arr);
-            });
+                    }
+                    res.send(docs[0]);
+                });
         });
     });
-};
+}
 
-module.exports = getAlbumSongsRoutes;
+module.exports = getAlbumRoutes;

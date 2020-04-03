@@ -9,6 +9,9 @@ const getSongUploadsRoutes = require ('./getSongUploads');
 const getAlnumUploadsRoutes = require ('./getAlbumUploads');
 const addSongsToAlbumRoutes = require ('./addSongsToAlbum')
 const getAlbumSongsRoutes = require ('./getAlbumSongs');
+const getSongRoutes = require ('./getSong')
+const getAlbumRoutes = require ('./getAlbum');
+
 const appRouter = (app, fs) => {
     app.get('/', (req, res) => {
         res.send('welcome to the development api-server');
@@ -25,6 +28,8 @@ const appRouter = (app, fs) => {
     getAlnumUploadsRoutes(app,fs);
     addSongsToAlbumRoutes (app, fs);
     getAlbumSongsRoutes(app,fs);
+    getSongRoutes(app, fs);
+    getAlbumRoutes(app, fs);
     userRoutes(app, fs);
 };
 

@@ -32,20 +32,6 @@ const addSongsToAlbumRoutes = (app, fs) => {
                         if(err){
                             throw err;
                         }
-            
-                        var newSong = new Song ({
-                            name: req.body.songName,
-                            year: req.body.songYear,
-                            genre: req.body.songGenre,
-                            mood: req.body.songMood,
-                            artist: req.body.songArtist
-                        });
-            
-                        newSong.save(function(err, result) {
-                          if (err) {
-                            throw err;
-                          }
-                        });
                     });
                     collection.updateOne(
                         {_id: new ObjectId(req.body.userId)},
@@ -57,7 +43,7 @@ const addSongsToAlbumRoutes = (app, fs) => {
                 if (err){
                     throw err;
                 }
-                collection2.find({_id:new ObjectId (req.body.AlbumId)}).toArray(function(err,docs){
+                collection2.find({_id:new ObjectId (req.body.albumId)}).toArray(function(err,docs){
                     collection2.updateOne(
                         {_id: new ObjectId(req.body.albumId)},
                         {$push:{ songs :req.body.songName}}
