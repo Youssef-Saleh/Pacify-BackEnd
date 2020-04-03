@@ -18,7 +18,6 @@ const premiumCheck = require('../middlewares/premium_auth');
 
 
 const loginRoutes = (app, fs) => {
-    // showing the liked albums
 
     app.get('/home', auth, premiumCheck,(req, res) => {
       fs.readFile('./templates/login.html', null, (err, data) => {
