@@ -14,10 +14,22 @@ app.use(bodyParser.urlencoded({extended : false}));
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
 const auth = require('../middlewares/token_auth');
+const premiumCheck = require('../middlewares/premium_auth');
 
 
 const loginRoutes = (app, fs) => {
     // showing the liked albums
+
+    app.get('/home', auth, premiumCheck,(req, res) => {
+      fs.readFile('./templates/login.html', null, (err, data) => {
+        if(err){
+          res.sendStatus(404);
+        } else {
+          res.write('welcome');
+        }
+      });
+    });
+
     app.get('/login', (req, res) => {
         fs.readFile('./templates/login.html', null, (err, data) => {
           if(err){
@@ -27,17 +39,6 @@ const loginRoutes = (app, fs) => {
           }
         });
     });
-
-    app.get('/home', auth, (req, res) => {
-      fs.readFile('./templates/login.html', null, (err, data) => {
-        if(err){
-          res.sendStatus(404);
-        } else {
-          res.write('welcome');
-        }
-      });
-    });
-      
       
     app.post('/login', (req, res) => {
       

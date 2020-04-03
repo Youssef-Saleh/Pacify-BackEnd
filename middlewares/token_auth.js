@@ -8,8 +8,8 @@ module.exports = (req, res, next) => {
     if(typeof token_header !== 'undefined') {
         try{
         token = jwt.verify(token_header, authVar.KEY);
-        req.userId = token._id; 
-
+        req.userId = jwt.decode(token_header)._id; 
+        console.log(req.userId);
         next();
         }catch(error){
             return res.sendStatus(403).json({
