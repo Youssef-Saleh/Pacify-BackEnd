@@ -16,9 +16,26 @@ router.post('/', (req, res, next) => {
   if(!req.body.name){
     req.body.name = 'New Playlist';
   };
-  playlistModel.create(req.body).then((playlist) => {
+  playlistModel.create({name: req.body.name, type: "userCreated"}).then((playlist) => {
     res.json(playlist) 
   }).catch(next);
+});
+
+router.post('/creator',decodeTekon, (req, res, next) => {
+  jwt.verify(req.token, 'secret', (err, userData) => {
+    if (err) {
+      res.sendStatus(403);
+    } else {
+
+  
+  if(!req.body.name){
+    req.body.name = 'New Playlist';
+  };
+  playlistModel.create({name: req.body.name, type: "userCreated", creator: userData.users._id}).then((playlist) => {
+    res.json(playlist) 
+  }).catch(next);
+}
+})
 });
 
 
@@ -114,57 +131,175 @@ function decodeTekon(req, res, next) {
 //   }) .catch(next);
 // });
 
+
 /**
  * Get trending playlist
  */
-// router.get('/playlist/:id', (req, res) => {
-//   songModel.aggregate(
-//     [
-//       {$sort: {timesPlayed: -1}},
-//       {$limit: 50}
-//     ]
-//   ).then((song) => {
-//     for (i = 0; i < song.length; i++) {
-//       playlistModel.updateOne({_id: req.params.id}, {$pop: {playlistSongs: -1}}).then(() => {});
-//     }
-//     for (i = 0; i < song.length; i++) {
-//       playlistModel.updateOne({_id: req.params.id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
-//     }
-//   }).then(() => {
-//     playlistModel.findOne({_id: req.params.id}).then((playlist) => {
-//       res.json(playlist.playlistSongs);
-//     })
-//   });
-// });
+router.get('/playlist/trending', (req, res) => {
+  var trendPlaylist;
+  playlistModel.findOne({type: "trending", name: "Trending"}).then((playlist) => {
+    trendPlaylist = playlist;
+  }).then(() => {
+    songModel.aggregate(
+      [
+        {$sort: {timesPlayed: -1}},
+        {$limit: 50}
+      ]
+    ).then((song) => {
+      for (i = 0; i < song.length; i++) {
+        playlistModel.updateOne({_id: trendPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+      }
+      for (i = 0; i < song.length; i++) {
+        playlistModel.updateOne({_id: trendPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+      }
+    }).then(() => {
+      playlistModel.findOne({_id: trendPlaylist._id}).then((playlist) => {
+        res.json(playlist.playlistSongs);
+      });
+    });
+  });
+});
 
 /**
- * Get mood-based playlist
+ * Get highest-rated playlists
  */
-// router.get('/playlist/:id', (req, res) => {
-//   songModel.findOne({_id: req.params.id}).then((song) => {
-//     songModel.aggregate(
-//       [
-//         {$match: {region: song.region}},
-//         {$limit: 20}
-//       ]
-//     )
-//   }).then((song) => {
+router.get('/playlist/highestRated', (req, res) => {
+  playlistModel.aggregate(
+    [
+      {$sort: {rating: -1}},
+      {$limit: 3}
+    ]
+  ).then((playlist) => {
+    res.json(playlist)
+  });
+});
 
-//   })
-//     songModel.aggregate(
-//       [
-//         {$match: {region: song.region}},
-//         {$limit: 20}
-//       ]
-//     ).then((song) => {
-//       playlistModel.insertMany({_id:500, playlistSongs: song}).then(()=>{});
-//     }).then(() => {
-//       playlistModel.findOne({_id: 500}).then((playlist) => {
-//         res.json(playlist.playlistSongs);
-//       })
-//     })
-//   })
-// });
+/**
+ * Generate random playlists
+ */
+router.get('/playlist/random', (req, res) => {
+  var playlistId = 0;
+  songModel.aggregate(
+    [
+      {$sample: {size: 20}}
+    ]
+  ).then((song) => {
+    playlistModel.create({name: "Random Playlist", type: "random"}).then((playlist) => {
+      playlistId = playlist._id;
+      for (i = 0; i < song.length; i++) {
+        playlistModel.updateOne({_id: playlist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+      }
+    }).then(() => {
+      playlistModel.findOne({_id: playlistId}).then((playlist) => {
+        res.json(playlist.playlistSongs);
+      });
+    });
+  });
+});
+
+/**
+ * Generate region playlists
+ */
+router.get('/playlist/region', (req, res) => {
+  var qString = req.query;
+  var reg;
+  var regPlaylist;
+  propertyModel.findOne({type: "Region", name: qString.region.toString()}).then((property) => {
+    reg = property;
+  }).then(() => {
+    playlistModel.findOne({type: "region", name: "Top in "+ reg.name}).then((playlist) => {
+      regPlaylist = playlist;
+    }).then(() => {
+      songModel.aggregate(
+        [
+          {$match: {region: reg.name}},
+          {$sort: {timesPlayed: -1}},
+          {$limit: 20}
+        ]
+      ).then((song) => {
+        for (i = 0; i < song.length; i++) {
+          playlistModel.updateOne({_id: regPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+        }
+        for (i = 0; i < song.length; i++) {
+          playlistModel.updateOne({_id: regPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+        }
+      }).then(() => {
+        playlistModel.findOne({_id: regPlaylist._id}).then((playlist) => {
+          res.json(playlist);
+        });
+      });
+    });
+  });
+});
+
+/**
+ * Generate genre-based playlists
+ */
+router.get('/playlist/genre', (req, res) => {
+  var qString = req.query;
+  var genreProp;
+  var genPlaylist;
+  propertyModel.findOne({type: "Genre", name: qString.genre.toString()}).then((property) => {
+    genreProp = property;
+  }).then(() => {
+    playlistModel.findOne({type: "genreBased", name: genreProp.name}).then((playlist) => {
+      genPlaylist = playlist;
+    }).then(() => {
+      songModel.aggregate(
+        [
+          {$match: {genre: genreProp.name}},
+          {$sample: {size: 20}}
+        ]
+      ).then((song) => {
+        for (i = 0; i < song.length; i++) {
+          playlistModel.updateOne({_id: genPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+        }
+        for (i = 0; i < song.length; i++) {
+          playlistModel.updateOne({_id: genPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+        }
+      }).then(() => {
+        playlistModel.findOne({_id: genPlaylist._id}).then((playlist) => {
+          res.json(playlist);
+        });
+      });
+    });
+  });
+});
+
+/**
+ * Generate mood-based playlists
+ */
+router.get('/playlist/mood', (req, res) => {
+  var qString = req.query;
+  var moodProp;
+  var moodPlaylist;
+  propertyModel.findOne({type: "Mood", name: qString.mood.toString()}).then((property) => {
+    moodProp = property;
+  }).then(() => {
+    playlistModel.findOne({type: "moodBased", name: moodProp.name}).then((playlist) => {
+      moodPlaylist = playlist;
+    }).then(() => {
+      songModel.aggregate(
+        [
+          {$match: {mood: moodProp.name}},
+          {$sample: {size: 20}}
+        ]
+      ).then((song) => {
+        for (i = 0; i < song.length; i++) {
+          playlistModel.updateOne({_id: moodPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+        }
+        for (i = 0; i < song.length; i++) {
+          playlistModel.updateOne({_id: moodPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+        }
+      }).then(() => {
+        playlistModel.findOne({_id: moodPlaylist._id}).then((playlist) => {
+          res.json(playlist);
+        });
+      });
+    });
+  });
+});
+
 
 
 module.exports = router;

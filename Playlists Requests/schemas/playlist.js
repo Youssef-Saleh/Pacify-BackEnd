@@ -7,6 +7,15 @@ const playlistSchema = new schema({
     type: String,
     required: true
   },
+  type: {
+    type: String,
+    required: true
+  },
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+  rating: {
+    type: Number,
+    default: 0
+  },
   playlistSongs: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'song'

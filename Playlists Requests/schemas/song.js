@@ -7,8 +7,16 @@ const songSchema = new schema({
     type: String,
     required: true
   },
+  genre: {
+    type: mongoose.Schema.Types.String,
+    ref: 'property'
+  },
+  mood: {
+    type: mongoose.Schema.Types.String,
+    ref: 'property'
+  },
   region: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.String,
     ref: 'property'
   },
   timesPlayed: {
