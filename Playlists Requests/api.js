@@ -12,43 +12,30 @@ const propertyModel = require('./schemas/property');
  * Create Playlist: Create a playlist in database 
  * @param {string} name - The name of playlist
  */
-router.post('/', (req, res, next) => {
-  if(!req.body.name){
-    req.body.name = 'New Playlist';
-  };
-  playlistModel.create({name: req.body.name, type: "userCreated"}).then((playlist) => {
-    res.json(playlist) 
-  }).catch(next);
-});
-
-router.post('/creator',decodeTekon, (req, res, next) => {
+router.post('/', decodeTekon, (req, res, next) => {
   jwt.verify(req.token, 'secret', (err, userData) => {
     if (err) {
       res.sendStatus(403);
     } else {
-
-  
-  if(!req.body.name){
-    req.body.name = 'New Playlist';
-  };
-  playlistModel.create({name: req.body.name, type: "userCreated", creator: userData.users._id}).then((playlist) => {
-    res.json(playlist) 
-  }).catch(next);
-}
-})
+      if (!req.body.name) {
+        req.body.name = 'New Playlist';
+      }
+      playlistModel.create({name: req.body.name, type: "userCreated", creator: userData.users._id}).then((Playlist) => {
+        res.json(Playlist); 
+      }).catch(next);
+    }
+  });
 });
-
 
 /**
  * Get Playlist: Get into a playlist in library
  * @param {string} id - The id of playlist
  */
 router.get('/collection/playlist/:id', (req, res) => {
-  playlistModel.find({_id: req.params.id}).then((playlist) => {
-    res.send(playlist[0].playlistSongs);
+  playlistModel.find({_id: req.params.id}).then((Playlist) => {
+    res.send(Playlist[0]);
   })
 });
-
 
 /**
  * Like Playlist: Adds the id of an existing playlist to the liking user and the id of him/her to the liked playlist, in case playlist is liked, it ulikes it and vice versa
@@ -60,7 +47,7 @@ router.put('/playlist/:id',decodeTekon, (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-      userModel.findOne({_id: userData.users._id}, (err, user) => {
+      userModel.findOne({_id: userData.users._id}, (err, User) => {
         if (err) {
           res.sendStatus(403);
         } else {
@@ -68,8 +55,8 @@ router.put('/playlist/:id',decodeTekon, (req, res) => {
           var string1 = '1';
           var string2 = '2';
           var comparison = 10;
-          for (i = 0; i < user.likedPlaylists.length; i++) {
-            string1 = (user.likedPlaylists[i]).toString();
+          for (i = 0; i < User.likedPlaylists.length; i++) {
+            string1 = (User.likedPlaylists[i]).toString();
             string2 = (req.params.id).toString();
             comparison = string1.localeCompare(string2);
             if (comparison === 0) {
@@ -77,7 +64,7 @@ router.put('/playlist/:id',decodeTekon, (req, res) => {
             };
           };
           if (!playlistIsLiked) {
-            playlistModel.updateOne({_id: req.params.id}, {$push: {likingUsers: userData.users._id}}).then(() => {
+            playlistModel.updateOne({_id: req.params.id}, {$push: {followers: userData.users._id}}).then(() => {
               userModel.updateOne({_id: userData.users._id}, {$push: {likedPlaylists: req.params.id}}).then(() => {
                 res.json({
                   message: "Liked"
@@ -85,7 +72,7 @@ router.put('/playlist/:id',decodeTekon, (req, res) => {
               })
             })
           } else {
-            playlistModel.updateOne({_id: req.params.id}, {$pull: {likingUsers: userData.users._id}}).then(() => {
+            playlistModel.updateOne({_id: req.params.id}, {$pull: {followers: userData.users._id}}).then(() => {
               userModel.updateOne({_id: userData.users._id}, {$pull: {likedPlaylists: req.params.id}}).then(() => {
                 res.json({
                   message: "Unliked"
@@ -98,7 +85,6 @@ router.put('/playlist/:id',decodeTekon, (req, res) => {
     };
   });
 });
-
 
 /**
  * Decoding the token of user to get his/her data
@@ -116,61 +102,45 @@ function decodeTekon(req, res, next) {
 };
 
 
-// router.post('/property', (req, res, next) => {
-//   propertyModel.create(req.body).then((property) => {
-//     res.json(property) 
-//   }).catch(next);
-// });
-
-// router.put('/song/:id', (req, res, next) => {
-//   songModel.findByIdAndUpdate({_id: req.params.id}, {$set: {region: req.body._id}}).then((song) => {
-//     console.log(req.body._id)
-//     res.json({
-//       song
-//     })
-//   }) .catch(next);
-// });
-
-
 /**
- * Get trending playlist
+ * Get trending playlist: playlist created in database updated with songs played the most
  */
 router.get('/playlist/trending', (req, res) => {
   var trendPlaylist;
-  playlistModel.findOne({type: "trending", name: "Trending"}).then((playlist) => {
-    trendPlaylist = playlist;
+  playlistModel.findOne({type: "trending", name: "Trending"}).then((Playlist) => {
+    trendPlaylist = Playlist;
   }).then(() => {
     songModel.aggregate(
       [
         {$sort: {timesPlayed: -1}},
         {$limit: 50}
       ]
-    ).then((song) => {
-      for (i = 0; i < song.length; i++) {
-        playlistModel.updateOne({_id: trendPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+    ).then((Song) => {
+      for (i = 0; i < Song.length; i++) {
+        playlistModel.updateOne({_id: trendPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
       }
-      for (i = 0; i < song.length; i++) {
-        playlistModel.updateOne({_id: trendPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+      for (i = 0; i < Song.length; i++) {
+        playlistModel.updateOne({_id: trendPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
       }
     }).then(() => {
-      playlistModel.findOne({_id: trendPlaylist._id}).then((playlist) => {
-        res.json(playlist.playlistSongs);
+      playlistModel.findOne({_id: trendPlaylist._id}).then((Playlist) => {
+        res.json(Playlist);
       });
     });
   });
 });
 
 /**
- * Get highest-rated playlists
+ * Get highest-rated playlist
  */
 router.get('/playlist/highestRated', (req, res) => {
   playlistModel.aggregate(
     [
       {$sort: {rating: -1}},
-      {$limit: 3}
+      {$limit: 1}
     ]
-  ).then((playlist) => {
-    res.json(playlist)
+  ).then((Playlist) => {
+    res.json(Playlist)
   });
 });
 
@@ -183,32 +153,33 @@ router.get('/playlist/random', (req, res) => {
     [
       {$sample: {size: 20}}
     ]
-  ).then((song) => {
-    playlistModel.create({name: "Random Playlist", type: "random"}).then((playlist) => {
-      playlistId = playlist._id;
-      for (i = 0; i < song.length; i++) {
-        playlistModel.updateOne({_id: playlist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+  ).then((Song) => {
+    playlistModel.create({name: "Random Playlist", type: "random"}).then((Playlist) => {
+      playlistId = Playlist._id;
+      for (i = 0; i < Song.length; i++) {
+        playlistModel.updateOne({_id: Playlist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
       }
     }).then(() => {
-      playlistModel.findOne({_id: playlistId}).then((playlist) => {
-        res.json(playlist.playlistSongs);
+      playlistModel.findOne({_id: playlistId}).then((Playlist) => {
+        res.json(Playlist);
       });
     });
   });
 });
 
 /**
- * Generate region playlists
+ * Get region playlists: Each region has a playlist created in database called "Top in 'region'" updated with region songs played the most
+ * Name of region is passed in query string => ?region=Egypt for example
  */
 router.get('/playlist/region', (req, res) => {
   var qString = req.query;
   var reg;
   var regPlaylist;
-  propertyModel.findOne({type: "Region", name: qString.region.toString()}).then((property) => {
-    reg = property;
+  propertyModel.findOne({type: "Region", name: qString.region.toString()}).then((Property) => {
+    reg = Property;
   }).then(() => {
-    playlistModel.findOne({type: "region", name: "Top in "+ reg.name}).then((playlist) => {
-      regPlaylist = playlist;
+    playlistModel.findOne({type: "region", name: "Top in "+ reg.name}).then((Playlist) => {
+      regPlaylist = Playlist;
     }).then(() => {
       songModel.aggregate(
         [
@@ -216,16 +187,16 @@ router.get('/playlist/region', (req, res) => {
           {$sort: {timesPlayed: -1}},
           {$limit: 20}
         ]
-      ).then((song) => {
-        for (i = 0; i < song.length; i++) {
-          playlistModel.updateOne({_id: regPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+      ).then((Song) => {
+        for (i = 0; i < Song.length; i++) {
+          playlistModel.updateOne({_id: regPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
         }
-        for (i = 0; i < song.length; i++) {
-          playlistModel.updateOne({_id: regPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+        for (i = 0; i < Song.length; i++) {
+          playlistModel.updateOne({_id: regPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
         }
       }).then(() => {
-        playlistModel.findOne({_id: regPlaylist._id}).then((playlist) => {
-          res.json(playlist);
+        playlistModel.findOne({_id: regPlaylist._id}).then((Playlist) => {
+          res.json(Playlist);
         });
       });
     });
@@ -233,33 +204,34 @@ router.get('/playlist/region', (req, res) => {
 });
 
 /**
- * Generate genre-based playlists
+ * Get genre-based playlists: Each genre has a playlist created in database with its name updated with songs having same genre
+ * Name of genre is passed in query string => ?genre=Arabic for example
  */
 router.get('/playlist/genre', (req, res) => {
   var qString = req.query;
   var genreProp;
   var genPlaylist;
-  propertyModel.findOne({type: "Genre", name: qString.genre.toString()}).then((property) => {
-    genreProp = property;
+  propertyModel.findOne({type: "Genre", name: qString.genre.toString()}).then((Property) => {
+    genreProp = Property;
   }).then(() => {
-    playlistModel.findOne({type: "genreBased", name: genreProp.name}).then((playlist) => {
-      genPlaylist = playlist;
+    playlistModel.findOne({type: "genreBased", name: genreProp.name}).then((Playlist) => {
+      genPlaylist = Playlist;
     }).then(() => {
       songModel.aggregate(
         [
           {$match: {genre: genreProp.name}},
           {$sample: {size: 20}}
         ]
-      ).then((song) => {
-        for (i = 0; i < song.length; i++) {
-          playlistModel.updateOne({_id: genPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+      ).then((Song) => {
+        for (i = 0; i < Song.length; i++) {
+          playlistModel.updateOne({_id: genPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
         }
-        for (i = 0; i < song.length; i++) {
-          playlistModel.updateOne({_id: genPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+        for (i = 0; i < Song.length; i++) {
+          playlistModel.updateOne({_id: genPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
         }
       }).then(() => {
-        playlistModel.findOne({_id: genPlaylist._id}).then((playlist) => {
-          res.json(playlist);
+        playlistModel.findOne({_id: genPlaylist._id}).then((Playlist) => {
+          res.json(Playlist);
         });
       });
     });
@@ -267,39 +239,39 @@ router.get('/playlist/genre', (req, res) => {
 });
 
 /**
- * Generate mood-based playlists
+ * Get mood-based playlists: Each mood has a playlist created in database with its name updated with songs having same mood
+ * Name of mood is passed in query string => ?mood=Happy for example
  */
 router.get('/playlist/mood', (req, res) => {
   var qString = req.query;
   var moodProp;
   var moodPlaylist;
-  propertyModel.findOne({type: "Mood", name: qString.mood.toString()}).then((property) => {
-    moodProp = property;
+  propertyModel.findOne({type: "Mood", name: qString.mood.toString()}).then((Property) => {
+    moodProp = Property;
   }).then(() => {
-    playlistModel.findOne({type: "moodBased", name: moodProp.name}).then((playlist) => {
-      moodPlaylist = playlist;
+    playlistModel.findOne({type: "moodBased", name: moodProp.name}).then((Playlist) => {
+      moodPlaylist = Playlist;
     }).then(() => {
       songModel.aggregate(
         [
           {$match: {mood: moodProp.name}},
           {$sample: {size: 20}}
         ]
-      ).then((song) => {
-        for (i = 0; i < song.length; i++) {
-          playlistModel.updateOne({_id: moodPlaylist._id}, {$pop: {playlistSongs: 1}}).then(() => {});
+      ).then((Song) => {
+        for (i = 0; i < Song.length; i++) {
+          playlistModel.updateOne({_id: moodPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
         }
-        for (i = 0; i < song.length; i++) {
-          playlistModel.updateOne({_id: moodPlaylist._id}, {$push: {playlistSongs: song[i]._id}}).then(() => {});
+        for (i = 0; i < Song.length; i++) {
+          playlistModel.updateOne({_id: moodPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
         }
       }).then(() => {
-        playlistModel.findOne({_id: moodPlaylist._id}).then((playlist) => {
-          res.json(playlist);
+        playlistModel.findOne({_id: moodPlaylist._id}).then((Playlist) => {
+          res.json(Playlist);
         });
       });
     });
   });
 });
-
 
 
 module.exports = router;

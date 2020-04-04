@@ -11,22 +11,22 @@ const playlistSchema = new schema({
     type: String,
     required: true
   },
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'user'},
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
   rating: {
     type: Number,
     default: 0
   },
-  playlistSongs: [{
+  songs: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'song'
+    ref: 'Song'
   }],
-  likingUsers: [{
+  followers: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+    ref: 'User'
   }]
 });
 
 // identify playlist model to be able to create playlists in database
-const playlistModel = mongoose.model('playlist', playlistSchema);
+const playlistModel = mongoose.model('Playlist', playlistSchema);
 
 module.exports = playlistModel;

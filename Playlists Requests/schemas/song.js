@@ -9,15 +9,15 @@ const songSchema = new schema({
   },
   genre: {
     type: mongoose.Schema.Types.String,
-    ref: 'property'
+    ref: 'Property'
   },
   mood: {
     type: mongoose.Schema.Types.String,
-    ref: 'property'
+    ref: 'Property'
   },
   region: {
     type: mongoose.Schema.Types.String,
-    ref: 'property'
+    ref: 'Property'
   },
   timesPlayed: {
     type: Number,
@@ -30,6 +30,6 @@ const songSchema = new schema({
 });
 
 // identify song model to be able to create songs in database
-const songModel = mongoose.model('song', songSchema);
+const songModel = mongoose.model('Song', songSchema);
 
 module.exports = songModel;
