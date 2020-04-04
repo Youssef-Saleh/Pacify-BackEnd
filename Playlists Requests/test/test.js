@@ -1,5 +1,5 @@
-const playlistModel = require('../schemas/playlist');
-const userModel = require('../schemas/user');
+const playlistModel = require('../models/playlist');
+const userModel = require('../models/user');
 const index = require('../index');
 const jwt = require('jsonwebtoken');
 const chai = require('chai');
@@ -20,7 +20,12 @@ describe('Playlist', () => {
         name: ""
       };
       let user = new userModel({
-        name: "Sherif"
+        email: "user1@admin.com",
+        password: "secret",
+        nickname: "User",
+        type: "Free",
+        gender: "Male",
+        phone: "0123534569"
       });
       userModel.create(user);
       userToken = jwt.sign({users: user}, 'secret');
@@ -42,7 +47,12 @@ describe('Playlist', () => {
         name: "myPlaylist"
       };
       let user = new userModel({
-        name: "Sherif"
+        email: "user2@admin.com",
+        password: "secret",
+        nickname: "User",
+        type: "Free",
+        gender: "Male",
+        phone: "0123534569"
       });
       userModel.create(user);
       userToken = jwt.sign({users: user}, 'secret');
@@ -91,7 +101,12 @@ describe('Playlist', () => {
         type: "userCreated"
       });
       let user = new userModel({
-        name: "Sherif"
+        email: "user3@admin.com",
+        password: "secret",
+        nickname: "User",
+        type: "Free",
+        gender: "Male",
+        phone: "0123534569"
       });
       playlistModel.create(playlist);
       userModel.create(user);
@@ -115,7 +130,12 @@ describe('Playlist', () => {
       });
       playlistModel.create(playlist);
       let user = new userModel({
-        name: "Sherif",
+        email: "user4@admin.com",
+        password: "secret",
+        nickname: "User",
+        type: "Free",
+        gender: "Male",
+        phone: "0123534569",
         likedPlaylists: [playlist._id]
       });
       userModel.create(user);

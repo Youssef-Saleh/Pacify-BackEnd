@@ -5,7 +5,11 @@ const mongoose = require('mongoose');
 const app = express();
 
 // connect to database
-mongoose.connect('mongodb://localhost/pacifydb')
+mongoose.connect('mongodb://localhost:27017/testpacify', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex : true
+})
 mongoose.Promise = global.Promise;
 
 app.use(bodyParser.json());

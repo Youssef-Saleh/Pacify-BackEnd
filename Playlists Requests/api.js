@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
-const playlistModel = require('./schemas/playlist');
-const userModel = require('./schemas/user');
-const songModel = require('./schemas/song');
-const propertyModel = require('./schemas/property');
+const playlistModel = require('./models/playlist');
+const userModel = require('./models/user');
+const songModel = require('./models/song');
+const propertyModel = require('./models/property');
 
 
 /**
