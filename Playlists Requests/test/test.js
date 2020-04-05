@@ -1,6 +1,6 @@
 const playlistModel = require('../models/playlist');
 const userModel = require('../models/user');
-const index = require('../index');
+const app = require('../app');
 const jwt = require('jsonwebtoken');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
@@ -29,7 +29,7 @@ describe('Playlist', () => {
       });
       userModel.create(user);
       userToken = jwt.sign({users: user}, 'secret');
-      chai.request(index)
+      chai.request(app)
       .post('/')
       .set('Authorization', 'Bearer ' + userToken)
       .send(playlist)
@@ -56,7 +56,7 @@ describe('Playlist', () => {
       });
       userModel.create(user);
       userToken = jwt.sign({users: user}, 'secret');
-      chai.request(index)
+      chai.request(app)
       .post('/')
       .set('Authorization', 'Bearer ' + userToken)
       .send(playlist)
@@ -80,7 +80,7 @@ describe('Playlist', () => {
         type: "userCreated"
       });
       playlistModel.create(playlist);
-      chai.request(index)
+      chai.request(app)
       .get('/collection/playlist/' + playlist.id)
       .send(playlist)
       .end((err, res) => {
@@ -111,7 +111,7 @@ describe('Playlist', () => {
       playlistModel.create(playlist);
       userModel.create(user);
       userToken = jwt.sign({users: user}, 'secret');
-      chai.request(index)
+      chai.request(app)
       .put('/playlist/'+ playlist.id)
       .set('Authorization', 'Bearer ' + userToken)
       .send(playlist)
@@ -140,7 +140,7 @@ describe('Playlist', () => {
       });
       userModel.create(user);
       userToken = jwt.sign({users: user}, 'secret');
-      chai.request(index)
+      chai.request(app)
       .put('/playlist/'+ playlist.id)
       .set('Authorization', 'Bearer ' + userToken)
       .send(playlist)
@@ -158,7 +158,7 @@ describe('Playlist', () => {
    */
   describe('Get Trending Playlist', () => {
     it('It should return trending playlist', (done) => {
-      chai.request(index)
+      chai.request(app)
       .get('/playlist/trending')
       .end((err, res) => {
         res.should.have.status(200);
@@ -179,7 +179,7 @@ describe('Playlist', () => {
       playlistModel.aggregate([{$sort: {rating: -1}}]).then((Playlist) => {
         highestRating = Playlist[0].rating;
       });
-      chai.request(index)
+      chai.request(app)
       .get('/playlist/highestRated')
       .end((err, res) => {
         res.should.have.status(200);
@@ -195,7 +195,7 @@ describe('Playlist', () => {
    */
   describe('Get Random Playlist', () => {
     it('It should create new random playlist', (done) => {
-      chai.request(index)
+      chai.request(app)
       .get('/playlist/random')
       .end((err, res) => {
         res.should.have.status(200);
@@ -212,7 +212,7 @@ describe('Playlist', () => {
    */
   describe('Get Region-Based Playlist', () => {
     it('It should return region-based playlist called "Top in Egypt" when query string object.region equals "Egypt"', (done) => {
-      chai.request(index)
+      chai.request(app)
       .get('/playlist/region')
       .query({region: 'Egypt'})
       .end((err, res) => {
@@ -230,7 +230,7 @@ describe('Playlist', () => {
    */
   describe('Get Genre-Based Playlist', () => {
     it('It should return genre-based playlist called "Arabic" when query string object.genre equals "Arabic"', (done) => {
-      chai.request(index)
+      chai.request(app)
       .get('/playlist/genre')
       .query({genre: 'Arabic'})
       .end((err, res) => {
@@ -248,7 +248,7 @@ describe('Playlist', () => {
    */
   describe('Get Mood-Based Playlist', () => {
     it('It should return mood-based playlist called "Happy" when query string object.mood equals "Happy"', (done) => {
-      chai.request(index)
+      chai.request(app)
       .get('/playlist/mood')
       .query({mood: 'Happy'})
       .end((err, res) => {
