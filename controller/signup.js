@@ -27,7 +27,8 @@ module.exports = {
             phone: req.body.phone,
             fbuser: req.body.fbuser,
             img: req.body.img,
-            country: req.body.country
+            country: req.body.country,
+            img: req.body.img
         });
         
         users.save()
