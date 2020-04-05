@@ -28,7 +28,7 @@ var properties = [
     new Property({
         name: "Country",
         type: "Genre"
-
+        
     }),
     new Property({
         name: "Electronic",
@@ -95,7 +95,6 @@ var properties = [
     new Property({
         name: "Calm",
         type: "mood"
-
     }),
     new Property({
         name: "Dark",
@@ -104,7 +103,6 @@ var properties = [
     new Property({
         name: "Dramatic",
         type: "mood"
-
     }),
     new Property({
         name: "Funky",
@@ -113,7 +111,6 @@ var properties = [
     new Property({
         name: "Happy",
         type: "mood"
-
     }),
     new Property({
         name: "Inspirational",
