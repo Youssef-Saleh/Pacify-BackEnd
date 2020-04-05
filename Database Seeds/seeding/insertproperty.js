@@ -95,6 +95,7 @@ var properties = [
     new Property({
         name: "Calm",
         type: "mood"
+
     }),
     new Property({
         name: "Dark",
@@ -103,6 +104,7 @@ var properties = [
     new Property({
         name: "Dramatic",
         type: "mood"
+
     }),
     new Property({
         name: "Funky",
@@ -111,6 +113,7 @@ var properties = [
     new Property({
         name: "Happy",
         type: "mood"
+
     }),
     new Property({
         name: "Inspirational",
@@ -119,11 +122,12 @@ var properties = [
     new Property({
         name: "Romantic",
         type: "mood"
+
     }),
     new Property({
         name: "Sad",
         type: "mood"
-    })
+    }),
 ];
 
 var counter = 0;
