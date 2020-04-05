@@ -2,7 +2,6 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
-    //_id: mongoose.Schema.Types.ObjectId,
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     nickname: {type: String, required: true},
@@ -13,6 +12,7 @@ var schema = new Schema({
     birthdate: {type: Date, default: null},
     joindate:{type: Date, default: Date.now()},
     likedAlbums:{type: Array, default: []},
+    likedPlaylists: [{type: mongoose.Schema.Types.ObjectId, ref: 'Playlist'}],
     likedSongs: {type:Array, default: []},
     likedArtists: {type:Array, default: []},
     followers:{type: Array, default: []},
