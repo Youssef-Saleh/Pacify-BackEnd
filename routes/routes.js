@@ -10,6 +10,7 @@ const getAlnumUploadsRoutes = require ('./getAlbumUploads');
 const addSongsToAlbumRoutes = require ('./addSongsToAlbum')
 const getAlbumSongsRoutes = require ('./getAlbumSongs');
 const getSongRoutes = require ('./getSong')
+const remixesRoutes = require ('./remixes');
 const getAlbumRoutes = require ('./getAlbum');
 
 const appRouter = (app, fs) => {
@@ -30,6 +31,7 @@ const appRouter = (app, fs) => {
     getAlbumSongsRoutes(app,fs);
     getSongRoutes(app, fs);
     getAlbumRoutes(app, fs);
+    remixesRoutes(app, fs);
     userRoutes(app, fs);
 };
 
