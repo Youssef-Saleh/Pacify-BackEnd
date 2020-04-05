@@ -7,7 +7,6 @@ var schema = new Schema({
     rating: {type: Number, default: 0},
     timesPlayed: {type: Number, default: 0},
     songs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Song'}],
-    likingUsers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     mood: {type: mongoose.Schema.Types.String, ref: 'Property', default: null},

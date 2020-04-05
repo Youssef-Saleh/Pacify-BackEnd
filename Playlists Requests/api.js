@@ -140,7 +140,7 @@ router.get('/playlist/highestRated', (req, res) => {
       {$limit: 1}
     ]
   ).then((Playlist) => {
-    res.json(Playlist)
+    res.json(Playlist[0])
   });
 });
 

@@ -11,7 +11,7 @@ var schema = new Schema({
     activated: {type: Boolean, default: false},
     birthdate: {type: Date, default: null},
     joindate:{type: Date, default: Date.now()},
-    likedAlbums:[{type: mongoose.Schema.Types.ObjectId, ref: 'Album'}],
+    likedAlbums:{type: Array, default: []},
     likedPlaylists: [{type: mongoose.Schema.Types.ObjectId, ref: 'Playlist'}],
     likedSongs: {type:Array, default: []},
     likedArtists: {type:Array, default: []},

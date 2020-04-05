@@ -13,7 +13,7 @@ var schema = new Schema({
     rateCount:{type:Number,default:0},
     rating: {type: Number, default: 0},
     timesPlayed: {type: Number, default: 0},
-    userId:[{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+    userId:{type: Array, default: []}
 });
 
 module.exports = mongoose.model('Song', schema);
