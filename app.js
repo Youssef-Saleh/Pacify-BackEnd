@@ -18,7 +18,6 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 const routes = require('./routes/routes.js')(app, fs);
 const signup = require ('./routing/signup');
 const accOverview = require ('./routing/accoverview');
-const login = require ('./routing/login');
 const passwordReset = require ('./routing/passwordReset');
 const firstTime = require ('./routing/firstTime');
 
@@ -40,8 +39,6 @@ app.use('/signup', signup);  //calling the routing of the signup
 app.use('/select', firstTime); //routing for first time preferences
 
 app.use('/account', accOverview); //calling the account overview routing
-
-app.use('/login', login); //calling the login routing
 
 app.use('/password-reset', passwordReset); //calling the reset password routing
 

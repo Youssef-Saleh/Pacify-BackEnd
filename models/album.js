@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
+    //_id: mongoose.Schema.Types.ObjectId,
     imagePath: {type: String, required: true},
     name: {type: String, required: true},
     year: {type: Number, required: true},

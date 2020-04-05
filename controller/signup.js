@@ -1,5 +1,5 @@
 const mongoose = require ('mongoose');
-const User = require ('../models/user');
+const User = require ('../Database Seeds/models/user');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
