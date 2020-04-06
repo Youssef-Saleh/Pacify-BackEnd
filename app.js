@@ -12,7 +12,8 @@ var ObjectId = require('mongoose').Types.ObjectId;
 app.use(express.static('./static'));
 app.use(bodyParser.urlencoded({extended : false}));
 
-mongoose.connect('mongodb://localhost:27017/testpacify');
+const mongoosePort = require('./env_variables/env_vars.json').mongoosePort
+mongoose.connect(mongoosePort);
 
 // this is where we'll handle our various routes from
 const routes = require('./routes/routes.js')(app, fs);
@@ -31,12 +32,8 @@ const httpsOptions = {
   key: fs.readFileSync(path.join(__dirname, 'ssl', 'key.pem'))
 }
 
-app.use(require('./routes/api'));
-
 app.use(express.static(directoryToServe));
 app.use([express.urlencoded({extended: true}), express.json() ]); //to deal with post requests
-
-//app.use('/signup', signup);  //calling the routing of the signup
 
 app.use('/select', firstTime); //routing for first time preferences
 

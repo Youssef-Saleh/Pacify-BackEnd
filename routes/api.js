@@ -11,16 +11,13 @@ const playlistModel = require('../database seeds/models/playlist');
 //const userModel = require('../database seeds/models/user');
 const propertyModel = require('../database seeds/models/property');
 
-const authVar = require('../env_variables/env_vars.json')
-const auth = require('../middlewares/token_auth');
-const premiumCheck = require('../middlewares/premium_auth');
-
 const playlistRoutes = (app, fs, songModel) => {
   /**
    * Create Playlist: Create a playlist in database 
    * @param {string} name - The name of playlist
    */
-  app.post('/', auth, (req, res, next) => {
+
+  app.post('/dehk', auth, (req, res, next) => {
     jwt.verify(req.token, 'secret', (err, userData) => {
       if (err) {
         res.sendStatus(403);

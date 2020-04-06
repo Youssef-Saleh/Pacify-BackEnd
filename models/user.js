@@ -7,7 +7,7 @@ var schema = new Schema({
     password: {type: String, required: true},
     nickname: {type: String, required: true},
     username: {type: String},
-    type: {type: String, required: true},
+    type: {type: String, required: true, default: "Free"},
     gender: {type: String, required: true},
     phone: {type: String, required: true},
     activated: {type: Boolean, default: false},

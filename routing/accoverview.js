@@ -4,7 +4,8 @@ const tokenhandler = require ('../controller/auth');
 const jwt = require('jsonwebtoken');
 const mongoose = require ('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/testpacify');
+const mongoosePort = require('../env_variables/env_vars.json').mongoosePort
+mongoose.connect(mongoosePort);
 
 
 router.get('/overview', tokenhandler.verifyToken, (req, res) => {  

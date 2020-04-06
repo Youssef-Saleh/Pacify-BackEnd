@@ -1,7 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser')
-const app = express();
 const fs = require('fs');
 const mongoose = require ('mongoose');
 
@@ -11,13 +10,14 @@ const getAlbum = require('../middlewares/album_search');
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
-app.use(express.static('./static'));
-app.use(bodyParser.urlencoded({extended : false}));
-
-mongoose.connect('mongodb://localhost:27017/testpacify');
+const mongoosePort = require('../env_variables/env_vars.json').mongoosePort
+mongoose.connect(mongoosePort);
 
 
 const browseRoutes = (app, fs) => {
+
+    app.use(express.static('./static'));
+    app.use(bodyParser.urlencoded({extended : false}));    
 
     app.get('/browse/:text', getArtist, getSong, getAlbum, (req, res) => {   
         res.send(req.result);

@@ -1,3 +1,4 @@
 {
-    "KEY": "pacify2Auth"
+    "KEY": "pacify2Auth",
+    "mongoosePort" : "mongodb://localhost:27017/testpacify"
 }
