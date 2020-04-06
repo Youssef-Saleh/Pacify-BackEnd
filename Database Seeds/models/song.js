@@ -8,7 +8,7 @@ var schema = new Schema({
     genre: {type: mongoose.Schema.Types.String, ref: 'Property'},
     mood: {type: mongoose.Schema.Types.String, ref: 'Property'},
     region: {type: mongoose.Schema.Types.String, ref: 'Property'},
-    artist: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    artist: {type: String, ref: 'User'},
     featured: {type: Array, default: []},
     remixes: {type: Array, default: []},
     rateCount:{type:Number,default:0},

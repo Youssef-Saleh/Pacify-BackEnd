@@ -6,6 +6,8 @@ const authVar = require('../env_variables/env_vars.json')
 const auth = require('../middlewares/token_auth');
 const premiumCheck = require('../middlewares/premium_auth');
 
+var ObjectId = require('mongoose').Types.ObjectId;
+
 //const songModel = require('../database seeds/models/song');
 const playlistModel = require('../database seeds/models/playlist');
 //const userModel = require('../database seeds/models/user');
@@ -18,19 +20,15 @@ const playlistRoutes = (app, fs, songModel) => {
    */
 
   app.post('/dehk', auth, (req, res, next) => {
-    jwt.verify(req.token, 'secret', (err, userData) => {
-      if (err) {
-        res.sendStatus(403);
-      } else {
-        if (!req.body.name) {
-          req.body.name = 'New Playlist';
-        }
-        playlistModel.create({name: req.body.name, type: "userCreated", creator: userData.users._id}).then((Playlist) => {
-          res.json(Playlist); 
-        }).catch(next);
-      }
-    });
-  });
+
+    if (!req.body.name) {
+      req.body.name = 'New Playlist';
+    }
+    playlistModel.create({name: req.body.name, type: "userCreated", creator: req.userId}).then((Playlist) => {
+      res.json(Playlist); 
+    }).catch(next);
+  })
+  
 
   /**
    * Get Playlist: Get into a playlist in library
@@ -47,49 +45,43 @@ const playlistRoutes = (app, fs, songModel) => {
    * @param {string} id - the id of playlist
    * @param {token} token - the token of user
    */
-  app.put('/playlist/:id',auth, (req, res) => {
-    jwt.verify(req.token, 'secret', (err, userData) => {
-      if (err) {
-        res.sendStatus(403);
-      } else {
-          mongoose.connection.db.collection('users', (err, userModel) =>{
-            userModel.findOne({_id: userData.users._id}, (err, User) => {
-            if (err) {
-              res.sendStatus(403);
-            } else {
-              var playlistIsLiked = false;
-              var string1 = '1';
-              var string2 = '2';
-              var comparison = 10;
-              for (i = 0; i < User.likedPlaylists.length; i++) {
-                string1 = (User.likedPlaylists[i]).toString();
-                string2 = (req.params.id).toString();
-                comparison = string1.localeCompare(string2);
-                if (comparison === 0) {
-                  playlistIsLiked = true;
-                };
-              };
-              if (!playlistIsLiked) {
-                playlistModel.updateOne({_id: req.params.id}, {$push: {followers: userData.users._id}}).then(() => {
-                  userModel.updateOne({_id: userData.users._id}, {$push: {likedPlaylists: req.params.id}}, () => {
-                    res.json({
-                      message: "Liked"
-                    }); 
-                  })
-                })
-              } else {
-                playlistModel.updateOne({_id: req.params.id}, {$pull: {followers: userData.users._id}}).then(() => {
-                  userModel.updateOne({_id: userData.users._id}, {$pull: {likedPlaylists: req.params.id}}, () => {
-                    res.json({
-                      message: "Unliked"
-                    });
-                  })
-                })
-              };
-            }
-          });
-        });
-      };
+  app.put('/playlist/:id', auth, (req, res) => {
+    mongoose.connection.db.collection('users', (err, userModel) =>{
+      userModel.find({_id: new ObjectId(req.userId)})
+      .toArray((err, User) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          var playlistIsLiked = false;
+          var string1 = '1';
+          var string2 = '2';
+          var comparison = 10;
+          for (i = 0; i < User[0].likedPlaylists.length; i++) {
+            string1 = (User[0].likedPlaylists[i]).toString();
+            string2 = (req.params.id).toString();
+            comparison = string1.localeCompare(string2);
+            if (comparison === 0) {
+              playlistIsLiked = true;
+            };
+          };
+          if (!playlistIsLiked) {
+            playlistModel.updateOne({_id: req.params.id}, {$push: {followers: req.userId}}).then(() => {})
+            userModel.updateOne({_id: new ObjectId(req.userId)}, {$push: {likedPlaylists: req.params.id}}, () => {
+              res.json({
+                message: "Liked"
+              }); 
+            })
+          } else {
+            playlistModel.updateOne({_id: req.params.id}, {$pull: {followers: req.userId}}).then(() => {
+              userModel.updateOne({_id: new ObjectId(req.userId)}, {$pull: {likedPlaylists: req.params.id}}, () => {
+                res.json({
+                  message: "Unliked"
+                });
+              })
+            })
+          };
+        }
+      });
     });
   });
 
