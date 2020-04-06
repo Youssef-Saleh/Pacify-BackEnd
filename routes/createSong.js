@@ -15,9 +15,9 @@ const fs = require('fs');
 // including handling JSON data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-var Song = require('../Database Seeds/models/song');
+//var Song = require('../Database Seeds/models/song');
 
-const createSongRoutes = (app, fs) => {
+const createSongRoutes = (app, fs, Song) => {
     app.post('/createSong', (req, res, next)=>{
         mongoose.connection.db.collection('users', function(err, collection2){
             if (err){

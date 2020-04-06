@@ -14,6 +14,8 @@ const getAlbumSongsRoutes = require ('./getAlbumSongs');
 const getSongRoutes = require ('./getSong')
 const remixesRoutes = require ('./remixes');
 const getAlbumRoutes = require ('./getAlbum');
+const playlistRoutes = require ('./api')
+var Song = require('../Database Seeds/models/song');
 
 const appRouter = (app, fs) => {
     app.get('/', (req, res) => {
@@ -26,7 +28,8 @@ const appRouter = (app, fs) => {
     likedArtistsRoutes(app, fs);
     likedSongsRoutes(app, fs);
     rateSongsRoutes(app, fs);
-    createSongRoutes(app, fs);
+    playlistRoutes(app, fs, Song);
+    createSongRoutes(app, fs, Song);
     createAlbumRoutes(app, fs);
     getSongUploadsRoutes(app,fs);
     getAlnumUploadsRoutes(app,fs);

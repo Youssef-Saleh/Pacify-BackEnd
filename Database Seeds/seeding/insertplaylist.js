@@ -69,7 +69,6 @@ var playlists = [
     new Playlist({
         name: "Rock",
         type: "Library"
-
     }),
     new Playlist({
         name: "Travel",

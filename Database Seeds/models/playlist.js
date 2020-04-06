@@ -7,9 +7,9 @@ var schema = new Schema({
     type: {type: String, required: true},
     rating: {type: Number, default: 0},
     timesPlayed: {type: Number, default: 0},
-    songs: [{type: mongoose.Schema.Types.ObjectId, ref: 'Song'}],
-    creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-    followers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    songs: [{type: mongoose.Schema.Types.ObjectId}], //ref: 'Song'}],
+    creator: {type: mongoose.Schema.Types.ObjectId}, //ref: 'User'},
+    followers: [{type: mongoose.Schema.Types.ObjectId}], //ref: 'User'}],
     mood: {type: mongoose.Schema.Types.String, ref: 'Property', default: null},
     genre: {type: mongoose.Schema.Types.String, ref: 'Property', default: null}
 });
