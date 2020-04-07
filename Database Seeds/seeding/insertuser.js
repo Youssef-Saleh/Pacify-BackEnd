@@ -1,7 +1,8 @@
 var User = require ('../models/user');
 var mongoose = require ('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/testpacify');
+var url = require('../../env_variables/env_vars.json').mongoosePort;
+mongoose.connect(url);
 
 var users = [
     //////////////////////////////////////////////////
@@ -168,7 +169,46 @@ var users = [
         gender: "unknown",
         phone: "unknown",
     }),
-
+    new User({
+        email: "h.shaker@artist.pacify",
+        password: "null",
+        nickname: "Haytham Shaker",
+        type: "Artist",
+        gender: "unknown",
+        phone: "unknown",
+    }),
+    new User({
+        email: "A.diab@artist.pacify",
+        password: "null",
+        nickname: "Amr Diab",
+        type: "Artist",
+        gender: "unknown",
+        phone: "unknown",
+    }),
+    new User({
+        email: "Angham@artist.pacify",
+        password: "null",
+        nickname: "Angham",
+        type: "Artist",
+        gender: "unknown",
+        phone: "unknown",
+    }),
+    new User({
+        email: "Asala@artist.pacify",
+        password: "null",
+        nickname: "Asala",
+        type: "Artist",
+        gender: "unknown",
+        phone: "unknown",
+    }),
+    new User({
+        email: "B.Soltan@artist.pacify",
+        password: "null",
+        nickname: "Bahaa Soltan",
+        type: "Artist",
+        gender: "unknown",
+        phone: "unknown",
+    }),
     /////////////////////////////////////////////////
     ///users
 

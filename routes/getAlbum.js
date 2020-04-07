@@ -15,13 +15,28 @@ const getAlbumRoutes = (app, fs) => {
 
     app.get('/album/:albumId', (req, res) => {
         mongoose.connection.db.collection('albums',function(err, collection){
-             collection.find({_id:new ObjectId(req.params.albumId)}).toArray(function(err,docs){
-                    if (err) {
-                        throw err;
+            collection.find({_id:new ObjectId(req.params.albumId)}).toArray(function(err,docs){
+                if (err) {
+                    throw err;
 
-                    }
-                    res.send(docs[0]);
+                }
+                
+                arr = []
+
+                for (var i = 0; i < docs[0].songs.length; i++) {
+                    arr.push(docs[0].songs[i])
+                }
+
+                mongoose.connection.db.collection('songs',function(err, collection2){
+                    collection2.find({name:{ $in: arr}}).toArray(function(err,docs2){
+        
+                        if (err) {
+                            throw err;
+                        }
+                        res.send(docs2);
+                    });
                 });
+            });
         });
     });
 }

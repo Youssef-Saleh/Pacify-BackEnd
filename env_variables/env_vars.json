@@ -1,4 +1,8 @@
 {
-    "KEY": "pacify2Auth",
-    "mongoosePort" : "mongodb://localhost:27017/testpacify"
+    "KEY": "secretkey",
+    "mongoosePort" : "mongodb://localhost:27017/testpacify",
+    "auth": {
+        "user": "pacify@pacify.tech",
+        "pass": "26855765Pacify!" 
+      }
 }

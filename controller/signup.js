@@ -1,6 +1,7 @@
 const mongoose = require ('mongoose');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const auth = require('../env_variables/env_vars.json').auth
 
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
@@ -8,11 +9,12 @@ const transporter = nodemailer.createTransport({
     host: "smtp.zoho.com",
     port: 465,
     secure: true, // true for 465, false for other ports
-    auth: {
-      user: "pacify@pacify.tech", // generated ethereal user
-      pass: "26855765Pacify!" // generated ethereal password
-    }
+    auth,
 });
+const mailURL= "http://localhost:5000";
+const senderAddress = '"Pacify" <pacify@pacify.tech>';
+const receiverAddress = "ahmadosgalal@gmail.com";
+
 
 module.exports = {
     insertuser : (req , res, User) => {
@@ -29,7 +31,7 @@ module.exports = {
             country: req.body.country,
             img: req.body.img
         });
-        console.log(users);
+        //console.log(users);
         users.save()
         .then( user => {
             res.status(201);
@@ -37,10 +39,10 @@ module.exports = {
             jwt.sign({user}, 'EmailSecret', { expiresIn: '50m' }, (err, token) => {
                     
                     if(!user.fbuser){
-                            const url = `http://localhost:5000/signup/emailconfrimation/?Authorization=Bearer ${token}`;
+                            const url = `${mailURL}/signup/emailconfirmation/?Authorization=Bearer ${token}`;
                             let mailOptions = {
-                            from: '"Pacify" <pacify@pacify.tech>', // sender address
-                            to: "masterahmed25@hotmail.com,  ahmadosgalal@gmail.com", // list of receivers
+                            from: senderAddress, // sender address
+                            to: receiverAddress, // list of receivers
                             subject: 'Email verification',
                             html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
                         };
@@ -71,9 +73,43 @@ module.exports = {
         })
         .catch(err => {
                 res.status(400);
-                console.log(err);
+                //console.log(err);
                 res.json("user already exists")
             
         })
+    },
+
+    emailVerify: (req, res, User) => {
+        jwt.verify(req.token, 'EmailSecret', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+                mongoose.connection.db.collection('users', function (err, collection) {
+                    collection.find({'email' : authData.user.email})
+                    .toArray((err, docs) => {
+                      if(docs.length == 0){
+                        res.send(err);
+                      } else {
+                          if(!docs[0].activated){
+                            mongoose.connection.db.collection('users', function (err, collection) {
+                                collection.updateOne({email: authData.user.email}, {$set: {activated: true}})
+                                if(err){
+                                    res.send(err);
+                                }
+                                else{
+                                  res.json("Email confirmed!");
+                                }
+                              });   
+                          } else {
+                                res.json("Email is already confirmed");
+                          }
+                        
+                      }
+                    });
+                  });  
+              
+            }
+          })
     }
 };

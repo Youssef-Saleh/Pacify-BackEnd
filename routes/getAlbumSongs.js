@@ -24,7 +24,20 @@ const getAlbumSongsRoutes = (app, fs) => {
 
                 }
                 arr = []
-                arr=docs[0].songs
+
+                for (var i = 0; i < docs[0].songs.length; i++) {
+                    arr.push(docs[0].songs[i])
+                }
+
+                mongoose.connection.db.collection('songs',function(err, collection2){
+                    collection2.find({name:{ $in: arr}}).toArray(function(err,docs2){
+       
+                       if (err) {
+                           throw err;
+                       }
+                       res.send(docs2);
+                    });
+                   });
                 res.send(arr);
             });
         });

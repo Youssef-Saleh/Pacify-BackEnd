@@ -23,6 +23,14 @@ const browseRoutes = (app, fs) => {
         res.send(req.result);
     });
 
+    app.get('/browse', (req, res) => {   
+        mongoose.connection.db.collection('properties',function(err, collection){
+            collection.find({type: "Genre"}).toArray(function(err,docs){
+                res.json(docs);
+            })
+        })
+    });
+
     
 }
 module.exports = browseRoutes;

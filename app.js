@@ -1,26 +1,25 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser')
 const app = express();
 const fs = require('fs');
 const https = require('https');
 const mongoose = require ('mongoose');
-const nodemailer = require('nodemailer');
+const cors = require('cors')
+
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
 app.use(express.static('./static'));
 app.use(bodyParser.urlencoded({extended : false}));
+app.use(cors());
+app.use('/audio',express.static('../Songs/Songs'))
 
 const mongoosePort = require('./env_variables/env_vars.json').mongoosePort
 mongoose.connect(mongoosePort);
 
 // this is where we'll handle our various routes from
 const routes = require('./routes/routes.js')(app, fs);
-//const signup = require ('./routing/signup');
-const accOverview = require ('./routing/accoverview');
-const passwordReset = require ('./routing/passwordReset');
-const firstTime = require ('./routing/firstTime');
+
 
 const directoryToServe = 'templates';
 const path = require('path');
@@ -35,11 +34,6 @@ const httpsOptions = {
 app.use(express.static(directoryToServe));
 app.use([express.urlencoded({extended: true}), express.json() ]); //to deal with post requests
 
-app.use('/select', firstTime); //routing for first time preferences
-
-app.use('/account', accOverview); //calling the account overview routing
-
-app.use('/password-reset', passwordReset); //calling the reset password routing
 
 https.createServer(httpsOptions, app)
 

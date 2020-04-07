@@ -8,13 +8,15 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
+const premiumCheck = require('../middlewares/premium_auth');
 
 const likedSongsRoutes = (app, fs) => {
     // showing the liked Songs
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.get('/likedSongs', (req, res) => {
+    app.get('/likedSongs', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
              collection.find({_id:new ObjectId(req.body.userId)}).toArray(function(err,docs){
 

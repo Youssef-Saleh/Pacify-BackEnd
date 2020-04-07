@@ -1,18 +1,19 @@
 const mongoose = require ('mongoose');
 const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
+const auth = require('../env_variables/env_vars.json').auth
 
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
 const transporter = nodemailer.createTransport({
-  service: "Gmail",
-    port: 587,
-    secure: false, // true for 465, false for other ports
-    auth: {
-      user: "pacifyproject@gmail.com", // generated ethereal user
-      pass: "A123456bc" // generated ethereal password
-    }
+  host: "smtp.zoho.com",
+  port: 465,
+  secure: true, // true for 465, false for other ports
+  auth,
 });
+const mailURL= "http://localhost:5000";
+const senderAddress = '"Pacify" <pacify@pacify.tech>';
+const receiverAddress = "ahmadosgalal@gmail.com";
 
 module.exports = {
     resetPass : (req , res) => {
@@ -32,11 +33,10 @@ module.exports = {
                         res.send("Success!");
                         var user = docs[0];
                         jwt.sign({user: user}, 'passwordKey', { expiresIn: '50m' }, (err, token) => {
-                          const url = `http://localhost:3000/password-reset/change/?Authorization=Bearer ${token}`;
-                          console.log(token);
-                          let mailOptions = {
-                            from: '"Pacify" <pacifyproject@gmail.com>', // sender address
-                            to: "mwnyzinwhgwklrlxmb@awdrt.net", // list of receivers
+                          const url = `${mailURL}/signup/emailconfirmation/?Authorization=Bearer ${token}`;
+                            let mailOptions = {
+                            from: senderAddress, // sender address
+                            to: receiverAddress, // list of receivers
                             subject: 'Password Reset',
                             html: `Please click this email to reset your password: <a href="${url}">${url}</a>`,
                         };
@@ -63,11 +63,10 @@ module.exports = {
                       res.send("Success!");
                       var user = docs[0];
                       jwt.sign({user: user}, 'passwordKey', { expiresIn: '50m' }, (err, token) => {
-                      const url = `http://localhost:3000/password-reset/change/?Authorization=Bearer ${token}`;
-                      console.log(token);
-                      let mailOptions = {
-                          from: '"Pacify" <pacifyproject@gmail.com>', // sender address
-                          to: "mwnyzinwhgwklrlxmb@awdrt.net", // list of receivers
+                          const url = `${mailURL}/signup/emailconfirmation/?Authorization=Bearer ${token}`;
+                          let mailOptions = {
+                          from: senderAddress, // sender address
+                          to: receiverAddress, // list of receivers
                           subject: 'Password Reset',
                           html: `Please click this email to reset your password: <a href="${url}">${url}</a>`,
                       };
@@ -84,6 +83,35 @@ module.exports = {
                 
               }
             });
+          });
+        },
+        loadingChangePage: (req, res, User) => {
+          jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              res.json("success");
+            }
+          });
+        },
+        changePassword: (req, res, User) => {
+          jwt.verify(req.token, 'passwordKey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              mongoose.connection.db.collection('users', function (err, collection) {
+                collection.updateOne({email: authData.user.email}, {$set: {password: req.body.newPassword}})
+                if(err){
+                    res.send(err);
+                }
+                else{
+                    res.send('Success');
+                }
+                
+              });
+            }
           });
         }
 

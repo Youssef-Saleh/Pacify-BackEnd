@@ -1,13 +1,40 @@
 var Playlist = require ('../models/playlist');
 var mongoose = require ('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/testpacify');
+var url = require('../../env_variables/env_vars.json').mongoosePort;
+mongoose.connect(url);
 
 var playlists = [
 
     // Genre-Based
     new Playlist({
-        name: "Arabic",
+        name: "1st playlist",
+        genre: "Arabic",
+        type: "genreBased"
+    }),
+    new Playlist({
+        name: "nice playlist",
+        genre: "Arabic",
+        type: "genreBased"
+    }),
+    new Playlist({
+        name: "great playlist",
+        genre: "Arabic",
+        type: "genreBased"
+    }),
+    new Playlist({
+        name: "great time",
+        genre: "Blues",
+        type: "genreBased"
+    }),
+    new Playlist({
+        name: "blues classics",
+        genre: "Blues",
+        type: "genreBased"
+    }),
+    new Playlist({
+        name: "ahead of its time",
+        genre: "Blues",
         type: "genreBased"
     }),
     new Playlist({
