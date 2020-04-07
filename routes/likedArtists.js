@@ -8,15 +8,16 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
 
 const likedArtistsRoutes = (app, fs) => {
     // showing the liked Artists
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.get('/likedArtists', (req, res) => {
+    app.get('/likedArtists', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
-             collection.find({_id:new ObjectId(req.body.userId)}).toArray(function(err,docs){
+             collection.find({_id:new ObjectId(req.userId)}).toArray(function(err,docs){
 
                 if (err) {
                     throw err;
@@ -42,25 +43,25 @@ const likedArtistsRoutes = (app, fs) => {
             });
     });
     // liking an album
-    app.put('/likedArtists', (req, res, next) => {
+    app.put('/likedArtists', auth, (req, res, next) => {
         mongoose.connection.db.collection('users',function(err, collection){
             collection.updateOne(
-                {_id: new ObjectId(req.body.userId)},
+                {_id: new ObjectId(req.userId)},
                 {$push:{ likedArtists :req.body.artistId}}
             );
         });
         mongoose.connection.db.collection('users',function(err, collection){
             collection.updateOne(
                 {_id: new ObjectId(req.body.artistId)},
-                {$push:{ followers :req.body.userId}}
+                {$push:{ followers :req.userId}}
             );
         });
         res.end();
       });
     // unliking an album
-    app.put('/unlikeArtists', (req, res) => {
+    app.put('/unlikeArtists', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
-            collection.find({_id:new ObjectId (req.body.userId)}, {likedArtists:req.body.artistId}).toArray(function(err,docs){
+            collection.find({_id:new ObjectId (req.userId)}, {likedArtists:req.body.artistId}).toArray(function(err,docs){
                if (err) {
                    throw err;
                }
@@ -69,7 +70,7 @@ const likedArtistsRoutes = (app, fs) => {
                    throw err
                }else{
                     collection.updateOne(
-                        {_id: new ObjectId(req.body.userId)},
+                        {_id: new ObjectId(req.userId)},
                         {$pull:{ likedArtists :req.body.artistId}}
                     )
                   
@@ -77,7 +78,7 @@ const likedArtistsRoutes = (app, fs) => {
             });
         });
         mongoose.connection.db.collection('users',function(err, collection){
-            collection.find({_id:new ObjectId (req.body.artistId)}, {followers:req.body.userId}).toArray(function(err,docs){
+            collection.find({_id:new ObjectId (req.body.artistId)}, {followers:req.userId}).toArray(function(err,docs){
                if (err) {
                    throw err;
                }
@@ -87,7 +88,7 @@ const likedArtistsRoutes = (app, fs) => {
                }else{
                     collection.updateOne(
                         {_id: new ObjectId(req.body.artistId)},
-                        {$pull:{ followers :req.body.userId}}
+                        {$pull:{ followers :req.userId}}
                     )
                   
                 }

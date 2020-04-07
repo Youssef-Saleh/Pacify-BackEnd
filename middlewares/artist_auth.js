@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     mongoose.connection.db.collection('users', function (err, collection) {
         collection.find({'_id': new ObjectId(req.userId)})
         .toArray((err, docs) => {
-          if(docs[0].type == 'Premium'){
+          if(docs[0].type == 'Artist'){
            next();
           } else {
             res.sendStaus(403)

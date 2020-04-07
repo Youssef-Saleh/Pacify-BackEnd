@@ -7,17 +7,19 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
+
 
 const addSongsToAlbumRoutes = (app, fs) => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.put('/addSongsToAlbum', (req, res, next) => {
+    app.put('/addSongsToAlbum', auth, (req, res, next) => {
         mongoose.connection.db.collection('users',function(err, collection){
             if (err){
                 throw err;
             }
-            collection.find({_id:new ObjectId (req.body.userId)},{type:"Artist"}).toArray(function(err,docs){
+            collection.find({_id:new ObjectId (req.userId)},{type:"Artist"}).toArray(function(err,docs){
                 if (err) {
                     throw err;
                 }else{
@@ -27,7 +29,7 @@ const addSongsToAlbumRoutes = (app, fs) => {
                         }
                     });
                     collection.updateOne(
-                        {_id: new ObjectId(req.body.userId)},
+                        {_id: new ObjectId(req.userId)},
                         {$push:{ uploadedSongs :req.body.songName}}
                     )
                  }

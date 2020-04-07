@@ -7,17 +7,19 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
+
 const getAlbumUploadsRoutes= (app, fs) => {
     // showing the uploaded albums
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.get('/getAlbumUploads', (req, res) => {
+    app.get('/getAlbumUploads', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
             if (err){
                 throw err;
             }
-             collection.find({_id:new ObjectId(req.body.userId)}, {type: "Artist"}).toArray(function(err,docs){
+             collection.find({_id:new ObjectId(req.userId)}, {type: "Artist"}).toArray(function(err,docs){
 
                 if (err){
                     throw err;

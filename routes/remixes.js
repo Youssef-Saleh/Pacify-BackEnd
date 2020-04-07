@@ -7,6 +7,9 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
+const artist_auth = require('../middlewares/artist_auth');
+
 var Song = require('../Database Seeds/models/song');
 
 const remixesRoutes = (app, fs) => {
@@ -14,7 +17,7 @@ const remixesRoutes = (app, fs) => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.get('/remixes/:remixId', (req, res) => {
+    app.get('/remixes/:remixId',(req, res) => {
         mongoose.connection.db.collection('songs',function(err, collection){
              collection.find({_id:new ObjectId(req.params.remixId)}).toArray(function(err,docs){
                     if (err) {
@@ -26,7 +29,7 @@ const remixesRoutes = (app, fs) => {
         });
     });
 
-    app.post('/createRemix', (req, res, next)=>{
+    app.post('/createRemix', auth, artist_auth, (req, res) =>{
         mongoose.connection.db.collection('users', function(err, collection2){
             if (err){
                 throw err;

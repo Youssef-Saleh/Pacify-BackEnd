@@ -8,13 +8,14 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
 
 const rateSongsRoutes = (app, fs) => {
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.put('/rateSongs', (req, res) => {
+    app.put('/rateSongs', auth, (req, res) => {
         mongoose.connection.db.collection('songs', function(err, collection){
             collection.find({_id : new ObjectId (req.body.songId)})
             .toArray((err, docs) => {

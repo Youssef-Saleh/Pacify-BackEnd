@@ -18,7 +18,7 @@ const likedSongsRoutes = (app, fs) => {
 
     app.get('/likedSongs', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
-             collection.find({_id:new ObjectId(req.body.userId)}).toArray(function(err,docs){
+             collection.find({_id:new ObjectId(req.userId)}).toArray(function(err,docs){
 
                 if (err) {
                     throw err;
@@ -44,26 +44,26 @@ const likedSongsRoutes = (app, fs) => {
             });
     });
     // liking an album
-    app.put('/likedSongs', (req, res, next) => {
+    app.put('/likedSongs', auth, (req, res, next) => {
         var query;
         mongoose.connection.db.collection('users',function(err, collection){
             collection.updateOne(
-                {_id: new ObjectId(req.body.userId)},
+                {_id: new ObjectId(req.userId)},
                 {$push:{ likedSongs :req.body.songId}}
             );
         });
         mongoose.connection.db.collection('songs',function(err, collection){
             collection.updateOne(
                 {_id: new ObjectId(req.body.songId)},
-                {$push:{ userId :req.body.userId}}
+                {$push:{ userId :req.userId}}
             );
         });
         res.end();
       });
     // unliking an album
-    app.put('/unlikeSongs', (req, res) => {
+    app.put('/unlikeSongs', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
-            collection.find({_id:new ObjectId (req.body.userId)}, {likedSongs:req.body.songId}).toArray(function(err,docs){
+            collection.find({_id:new ObjectId (req.userId)}, {likedSongs:req.body.songId}).toArray(function(err,docs){
                if (err) {
                    throw err;
                }
@@ -72,14 +72,14 @@ const likedSongsRoutes = (app, fs) => {
                    throw err
                }else{
                     collection.updateOne(
-                        {_id: new ObjectId(req.body.userId)},
+                        {_id: new ObjectId(req.userId)},
                         {$pull:{ likedSongs :req.body.songId}}
                     )
                   
                 }
             });
         mongoose.connection.db.collection('songs',function(err, collection){
-            collection.find({_id:new ObjectId (req.body.songId)}, {userId:req.body.userId}).toArray(function(err,docs){
+            collection.find({_id:new ObjectId (req.body.songId)}, {userId:req.userId}).toArray(function(err,docs){
                 if (err) {
                     throw err;
                 }
@@ -89,7 +89,7 @@ const likedSongsRoutes = (app, fs) => {
                 }else{
                     collection.updateOne(
                         {_id: new ObjectId(req.body.songId)},
-                        {$pull:{ userId :req.body.userId}}
+                        {$pull:{ userId :req.userId}}
                     )
                     
                 }

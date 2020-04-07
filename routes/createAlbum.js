@@ -6,6 +6,7 @@ mongoose.connect(mongoosePort);
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const auth = require('../middlewares/token_auth');
 
 var Album = require('../Database Seeds/models/album');
 
@@ -13,13 +14,13 @@ const createAlbumRoutes = (app, fs) => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.post('/createAlbum', (req, res, next)=>{
+    app.post('/createAlbum', auth, (req, res, next)=>{
 
         mongoose.connection.db.collection('users', function(err, collection2){
             if (err){ 
                 throw err;
             }
-            collection2.find({_id:new ObjectId(req.body.userId)}, {type:"Artist"}).toArray( function(err,docs) {
+            collection2.find({_id:new ObjectId(req.userId)}, {type:"Artist"}).toArray( function(err,docs) {
 
                 if (err){
                     throw err
@@ -43,7 +44,7 @@ const createAlbumRoutes = (app, fs) => {
                     });
                 }
                 collection2.updateOne(
-                    {_id: new ObjectId(req.body.userId)},
+                    {_id: new ObjectId(req.userId)},
                     {$push:{ uploadedAlbums :req.body.name}}
                 );
             });

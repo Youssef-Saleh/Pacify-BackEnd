@@ -7,16 +7,18 @@ mongoose.connect(mongoosePort);
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const auth = require('../middlewares/token_auth');
+
 const createSongRoutes = (app, fs, Song) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
-  app.post('/createSong', (req, res, next)=>{
+  app.post('/createSong', auth, (req, res, next)=>{
       mongoose.connection.db.collection('users', function(err, collection2){
           if (err){
               throw err;
           }
-          collection2.find({type:"Artist"},{_id:new ObjectId(req.body.userId)}).toArray( function(err,docs) {
+          collection2.find({type:"Artist"},{_id:new ObjectId(req.userId)}).toArray( function(err,docs) {
               if (err){
                   throw err
               }else{
@@ -43,7 +45,7 @@ const createSongRoutes = (app, fs, Song) => {
       });
     
       collection2.updateOne(
-        {_id: new ObjectId(req.body.userId)},
+        {_id: new ObjectId(req.userId)},
         {$push:{ uploadedSongs :req.body.name}}
       );
     });

@@ -3,6 +3,7 @@ const browseRoutes = require('./browse');
 const likedAlbumsRoutes = require('./likedAlbums');
 const likedArtistsRoutes = require('./likedArtists');
 const likedSongsRoutes = require('./likedSongs');
+const likedPlaylistsRoutes = require('./likedPlaylists');
 const rateSongsRoutes = require('./rateSongs');
 const userRoutes = require('./users');
 const createSongRoutes = require('./createSong');
@@ -37,6 +38,7 @@ const appRouter = (app, fs) => {
     likedAlbumsRoutes(app, fs);
     likedArtistsRoutes(app, fs);
     likedSongsRoutes(app, fs);
+    likedPlaylistsRoutes(app, fs);
     rateSongsRoutes(app, fs);
     signupRoutes(app, fs, User);
     firstTimeRoutes(app, fs, User, Property);
