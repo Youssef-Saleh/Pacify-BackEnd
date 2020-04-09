@@ -20,7 +20,7 @@ const getAlbumRoutes = (app, fs) => {
                     throw err;
 
                 }
-                
+                console.log(docs[0])
                 arr = []
 
                 for (var i = 0; i < docs[0].songs.length; i++) {

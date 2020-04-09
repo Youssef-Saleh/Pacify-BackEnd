@@ -33,7 +33,7 @@ module.exports = {
                         res.send("Success!");
                         var user = docs[0];
                         jwt.sign({user: user}, 'passwordKey', { expiresIn: '50m' }, (err, token) => {
-                          const url = `${mailURL}/signup/emailconfirmation/?Authorization=Bearer ${token}`;
+                          const url = `${mailURL}/password-reset/change/?Authorization=Bearer ${token}`;
                             let mailOptions = {
                             from: senderAddress, // sender address
                             to: receiverAddress, // list of receivers
@@ -63,7 +63,7 @@ module.exports = {
                       res.send("Success!");
                       var user = docs[0];
                       jwt.sign({user: user}, 'passwordKey', { expiresIn: '50m' }, (err, token) => {
-                          const url = `${mailURL}/signup/emailconfirmation/?Authorization=Bearer ${token}`;
+                          const url = `${mailURL}/password-reset/change/?Authorization=Bearer ${token}`;
                           let mailOptions = {
                           from: senderAddress, // sender address
                           to: receiverAddress, // list of receivers

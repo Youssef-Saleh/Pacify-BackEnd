@@ -292,7 +292,7 @@ var songs = [
     }),
     new Song({
         url : "https://www.mboxdrive.com/Bye%20Bye%20(Instrumental).mp3",
-        name: "Matghebosh",
+        name: "Allem Alby",
         year: 2019,
         genre: "Rock",
         mood: "Happy",
@@ -300,7 +300,7 @@ var songs = [
     }),
     new Song({
         url : "https://www.mboxdrive.com/Bye%20Bye%20(Instrumental).mp3",
-        name: "Ya Habiba",
+        name: "Ana Ayesh",
         year: 20219,
         genre: "Rock",
         mood: "Happy",
@@ -365,6 +365,14 @@ var songs = [
     new Song({
         url : "https://www.mboxdrive.com/Bye%20Bye%20(Instrumental).mp3",
         name: "Matghebosh",
+        year: 2019,
+        genre: "Rock",
+        mood: "Happy",
+        artist: "Haytham Shaker",
+    }),
+    new Song({
+        url : "https://www.mboxdrive.com/Bye%20Bye%20(Instrumental).mp3",
+        name: "Habiby Ya Omry",
         year: 2019,
         genre: "Rock",
         mood: "Happy",

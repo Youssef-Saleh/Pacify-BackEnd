@@ -20,16 +20,6 @@ const premiumCheck = require('../middlewares/premium_auth');
 
 const loginRoutes = (app, fs) => {
   app.use(express.static('./static'))
-
-  app.get('/home', auth, premiumCheck,(req, res) => {
-    fs.readFile('./templates/login.html', null, (err, data) => {
-      if(err){
-        res.sendStatus(404);
-      } else {
-        res.write('welcome');
-      }
-    });
-  });
     
   app.post('/login', (req, res) => {
       var token;

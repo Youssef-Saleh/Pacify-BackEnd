@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
           if(docs[0].type == 'Premium'){
            next();
           } else {
-            res.sendStaus(403)
+            res.send('unauthorized')
           }
         });
       });

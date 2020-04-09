@@ -63,7 +63,7 @@ var properties = [
         type: "Genre"
     }),
     new Property({
-        name: "R&B",
+        name: "R_B",
         type: "Genre"
 
     }),
@@ -77,7 +77,7 @@ var properties = [
 
     }),
     new Property({
-        name: "TV&Movies",
+        name: "TV_Movies",
         type: "Genre"
     }),
 

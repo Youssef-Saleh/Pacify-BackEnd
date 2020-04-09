@@ -25,6 +25,8 @@ const likedPlaylistsRoutes = (app, fs) => {
 
                 liked = []
 
+                console.log(docs[0].likedPlaylists)
+
                 for (var i = 0; i < docs[0].likedPlaylists.length; i++) {
                     liked.push(new ObjectId(docs[0].likedPlaylists[i]))
                 }
@@ -32,10 +34,7 @@ const likedPlaylistsRoutes = (app, fs) => {
                 mongoose.connection.db.collection('playlists',function(err, playlistModel){
                     playlistModel.find({_id : {$in:liked}}).toArray((err, likedArr) => {
 
-                        out = {
-                            'likedPlaylists' : likedArr,
-                        }
-                        res.send(out);
+                        res.send(likedArr);
                     })
                 });
             });

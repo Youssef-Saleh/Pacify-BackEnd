@@ -115,7 +115,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
           playlistModel.updateOne({_id: trendPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
         }
         for (i = 0; i < Song.length; i++) {
-          playlistModel.updateOne({_id: trendPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
+          playlistModel.updateOne({_id: trendPlaylist._id}, {$push: {songs: Song[i].name}}).then(() => {});
         }
       }).then(() => {
         playlistModel.findOne({_id: trendPlaylist._id}).then((Playlist) => {
@@ -152,7 +152,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
       playlistModel.create({name: "Random Playlist", type: "random"}).then((Playlist) => {
         playlistId = Playlist._id;
         for (i = 0; i < Song.length; i++) {
-          playlistModel.updateOne({_id: Playlist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
+          playlistModel.updateOne({_id: Playlist._id}, {$push: {songs: Song[i].name}}).then(() => {});
         }
       }).then(() => {
         playlistModel.findOne({_id: playlistId}).then((Playlist) => {
@@ -187,7 +187,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
             playlistModel.updateOne({_id: regPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
           }
           for (i = 0; i < Song.length; i++) {
-            playlistModel.updateOne({_id: regPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
+            playlistModel.updateOne({_id: regPlaylist._id}, {$push: {songs: Song[i].name}}).then(() => {});
           }
         }).then(() => {
           playlistModel.findOne({_id: regPlaylist._id}).then((Playlist) => {
@@ -222,7 +222,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
             playlistModel.updateOne({_id: genPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
           }
           for (i = 0; i < Song.length; i++) {
-            playlistModel.updateOne({_id: genPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
+            playlistModel.updateOne({_id: genPlaylist._id}, {$push: {songs: Song[i].name}}).then(() => {});
           }
         }).then(() => {
           playlistModel.findOne({_id: genPlaylist._id}).then((Playlist) => {
@@ -257,7 +257,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
             playlistModel.updateOne({_id: moodPlaylist._id}, {$pop: {songs: 1}}).then(() => {});
           }
           for (i = 0; i < Song.length; i++) {
-            playlistModel.updateOne({_id: moodPlaylist._id}, {$push: {songs: Song[i]._id}}).then(() => {});
+            playlistModel.updateOne({_id: moodPlaylist._id}, {$push: {songs: Song[i].name}}).then(() => {});
           }
         }).then(() => {
           playlistModel.findOne({_id: moodPlaylist._id}).then((Playlist) => {
