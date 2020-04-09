@@ -35,7 +35,8 @@ const loginRoutes = (app, fs) => {
               }
               
           } else {
-            jwt.sign({_id : docs[0]._id}, authVar.KEY, { expiresIn: '2h' }, (err, token) => {
+            const user= docs[0];
+            jwt.sign(user, authVar.KEY, { expiresIn: '2h' }, (err, token) => {
               console.log(token)
               res.json(token)
             });

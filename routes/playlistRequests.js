@@ -209,7 +209,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
     propertyModel.findOne({type: "Genre", name: qString.genre.toString()}).then((Property) => {
       genreProp = Property;
     }).then(() => {
-      playlistModel.findOne({type: "genreBased", name: genreProp.name}).then((Playlist) => {
+      playlistModel.findOne({type: "genreBased", genre: genreProp.name}).then((Playlist) => {
         genPlaylist = Playlist;
       }).then(() => {
         songModel.aggregate(
@@ -241,10 +241,10 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
     var qString = req.query;
     var moodProp;
     var moodPlaylist;
-    propertyModel.findOne({type: "Mood", name: qString.mood.toString()}).then((Property) => {
+    propertyModel.findOne({type: "mood", name: qString.mood.toString()}).then((Property) => {
       moodProp = Property;
     }).then(() => {
-      playlistModel.findOne({type: "moodBased", name: moodProp.name}).then((Playlist) => {
+      playlistModel.findOne({type: "moodBased", genre: moodProp.name}).then((Playlist) => {
         moodPlaylist = Playlist;
       }).then(() => {
         songModel.aggregate(

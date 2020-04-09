@@ -23,6 +23,7 @@ const accountRoutes = require ('./accoverview');
 const getGenreRoutes = require ('./getGenres');
 const libraryRoutes = require('./library');
 const homeRoutes = require('./home')
+const allPlaylists = require('./allplaylistst');
 
 var Song = require('../Database Seeds/models/song');
 var User = require('../Database Seeds/models/user');
@@ -59,6 +60,7 @@ const appRouter = (app, fs) => {
     getGenreRoutes(app, fs);
     libraryRoutes(app, fs);
     homeRoutes(app, fs);
+    allPlaylists(app, fs);
 };
 
 module.exports = appRouter;
