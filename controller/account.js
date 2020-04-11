@@ -1,5 +1,20 @@
+/** Express router providing account overview related controllers
+ * @module controller/account
+ * @requires jsonwebtoken
+ * @requires mongoose
+ * @requires environment-variables
+ */
+
+/**
+ * mongoose module
+ * @const
+ */
 const mongoose = require ('mongoose');
 const nodemailer = require('nodemailer');
+/**
+ * jsonwebtoken module
+ * @const
+ */
 const jwt = require('jsonwebtoken');
 
 mongoose.connect('mongodb://localhost:27017/testpacify');
@@ -14,7 +29,24 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+/**
+ * This module redirects to account settings
+ * 
+ * 
+ * @namespace accountFunctions
+ */
 module.exports = {
+/**
+ * function retrieves specific user data for account overview
+ * @memberof module:controller/account~accountFunctions
+ * @name retrieveOverview
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
     retrieveOverview: (req, res, User) => {
         jwt.verify(req.token, 'secretkey', (err, authData) => {
             if(err) {
@@ -31,6 +63,17 @@ module.exports = {
             }
           });
     },
+/**
+ * function retrieves specific user data for account profile
+ * @memberof module:controller/account~accountFunctions
+ * @name retrieveProfile
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
     retrieveProfile: (req, res, User) => {
         jwt.verify(req.token, 'secretkey', (err, authData) => {
             if(err) {
@@ -49,6 +92,17 @@ module.exports = {
             }
           });
     },
+/**
+ * function updates specific user data for account overview
+ * @memberof module:controller/account~accountFunctions
+ * @name updateProfile
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
     updateProfile: (req, res, User) => {
         jwt.verify(req.token, 'secretkey', (err, authData) => {
             if(err) {

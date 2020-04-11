@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controller/firstTime.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controller/firstTime.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Express router providing firstlogin related controllers
+ * @module controller/firstlogin
+ * @requires jsonwebtoken
+ * @requires mongoose
+ * @requires nodemailer
+ * @requires environment-variables
+ */
+
+ /**
+ * mongoose module
+ * @const
+ */
+const mongoose = require ('mongoose');
+/**
+ * jsonwebtoken module
+ * @const
+ */
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+
+mongoose.connect('mongodb://localhost:27017/testpacify');
+
+
+
+/**
+ * This module contain first login to choose artists and genres related functions
+ * 
+ * 
+ * @namespace firstTimeRoutes
+ */
+module.exports = {
+/**
+ * function retrieves list of genres
+ * @memberof module:controller/firstlogin~firstTimeRoutes
+ * @name retreieveGenres
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user model
+ * @param Property {Object} The property model
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
+    retreieveGenres: (req, res, User, Property) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              mongoose.connection.db.collection('properties', function (err, collection) {
+                collection.find({ 'type' : "Genre" })
+                .toArray((err, docs) => {
+                  if(docs.length == 0){
+                    res.send("No genres exist!")
+                  } else {
+                    //console.log(authData);
+                    res.status(200).send({
+                      "user": authData.user,
+                      "Genres": docs
+                    });
+                    
+                  }
+                });
+              }); 
+      
+             
+            }
+          });
+    },
+/**
+ * function seelects list of genres
+ * @memberof module:controller/firstlogin~firstTimeRoutes
+ * @name selectGenres
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user model
+ * @param Property {Object} The Property model
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */    
+    chooseGenres: (req, res, User, Property) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              //console.log(authData.user);
+              if(!authData.user.fbuser){
+                mongoose.connection.db.collection('users', function (err, collection) {
+                  collection.updateOne({_id: mongoose.Types.ObjectId(authData.user._id)}, {$set: {likedGenres: req.body.Genres}})
+                  if(err){
+                      res.send(err);
+                  }
+                  else{
+                      res.send('Genres inserted');
+                  }
+                  
+                });
+              }
+              else{
+                mongoose.connection.db.collection('users', function (err, collection) {
+                  collection.updateOne({email: authData.users.email}, {$set: {likedGenres: req.body.Genres}})
+                  if(err){
+                      res.send(err);
+                  }
+                  else{
+                      res.send('Genres inserted');
+                  }
+                  
+                });
+              }
+            }
+          });
+    },
+/**
+ * function retrieves list of artists
+ * @memberof module:controller/firstlogin~firstTimeRoutes
+ * @name retreieveArtists
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user model
+ * @param Property {Object} The property model
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */    
+    retreiveArtists: (req, res, User) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              mongoose.connection.db.collection('users', function (err, collection) {
+                collection.find({ 'type' : "Artist" })
+                .toArray((err, docs) => {
+                  if(docs.length == 0){
+                    res.send("No artists exist!")
+                  } else {
+                    console.log(authData);
+                    res.status(200).send({
+                      "user": authData.user,
+                      "Artists": docs
+                    });
+                    
+                  }
+                });
+              }); 
+        
+             
+            }
+          });
+    },
+/**
+ * function seelects list of artists
+ * @memberof module:controller/firstlogin~firstTimeRoutes
+ * @name selectArtists
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user model
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */    
+    selectArtists: (req, res, User) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              console.log(authData.user);
+              if(!authData.user.fbuser){
+                mongoose.connection.db.collection('users', function (err, collection) {
+                  collection.updateOne({_id: mongoose.Types.ObjectId(authData.user._id)}, {$set: {likedArtists: req.body.Artists}})
+                  if(err){
+                      res.send(err);
+                  }
+                  else{
+                      res.send('Artists inserted');
+                  }
+                  
+                });
+              }
+              else{
+                mongoose.connection.db.collection('users', function (err, collection) {
+                  collection.updateOne({email: authData.users.email}, {$set: {likedArtists: req.body.Artists}})
+                  if(err){
+                      res.send(err);
+                  }
+                  else{
+                      res.send('Artists inserted');
+                  }
+                  
+                });
+              }
+            }
+          });    
+    }
+};
+    
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addSongsToAlbumRoutes.html">addSongsToAlbumRoutes</a></li><li><a href="module-browseRoutes.html">browseRoutes</a></li><li><a href="module-controller_account.html">controller/account</a></li><li><a href="module-controller_authentication.html">controller/authentication</a></li><li><a href="module-controller_firstlogin.html">controller/firstlogin</a></li><li><a href="module-controller_password-reset.html">controller/password-reset</a></li><li><a href="module-controller_signup.html">controller/signup</a></li><li><a href="module-createAlbumRoutes.html">createAlbumRoutes</a></li><li><a href="module-createSongRoutes.html">createSongRoutes</a></li><li><a href="module-getAlbumRoutes.html">getAlbumRoutes</a></li><li><a href="module-getAlbumSongsRoutes.html">getAlbumSongsRoutes</a></li><li><a href="module-getAlbumUploadsRoutes.html">getAlbumUploadsRoutes</a></li><li><a href="module-getGenreRoutes.html">getGenreRoutes</a></li><li><a href="module-getSongRoutes.html">getSongRoutes</a></li><li><a href="module-getSongUploadsRoutes.html">getSongUploadsRoutes</a></li><li><a href="module-libraryRoutes.html">libraryRoutes</a></li><li><a href="module-likedAlbumsRoutes.html">likedAlbumsRoutes</a></li><li><a href="module-likedArtistsRoutes.html">likedArtistsRoutes</a></li><li><a href="module-likedSongsRoutes.html">likedSongsRoutes</a></li><li><a href="module-loginRoutes.html">loginRoutes</a></li><li><a href="module-playlistRoutes.html">playlistRoutes</a></li><li><a href="module-rateSongsRoutes.html">rateSongsRoutes</a></li><li><a href="module-remixesRoutes.html">remixesRoutes</a></li><li><a href="module-routers_account.html">routers/account</a></li><li><a href="module-routers_first-login.html">routers/first-login</a></li><li><a href="module-routers_password-reset.html">routers/password-reset</a></li><li><a href="module-routers_signup.html">routers/signup</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-controller_account-accountFunctions.html">accountFunctions</a></li><li><a href="module-controller_authentication-authFunctions.html">authFunctions</a></li><li><a href="module-controller_firstlogin-firstTimeRoutes.html">firstTimeRoutes</a></li><li><a href="module-controller_password-reset-passwordFunctions.html">passwordFunctions</a></li><li><a href="module-controller_signup-signupFunctions.html">signupFunctions</a></li><li><a href="module-routers_account-accountRoutes.html">accountRoutes</a></li><li><a href="module-routers_first-login-firstRoutes.html">firstRoutes</a></li><li><a href="module-routers_password-reset-passwordRoutes.html">passwordRoutes</a></li><li><a href="module-routers_signup-signupRoutes.html">signupRoutes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 11 2020 20:28:07 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

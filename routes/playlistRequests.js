@@ -8,11 +8,19 @@ const premiumCheck = require('../middlewares/premium_auth');
 
 var ObjectId = require('mongoose').Types.ObjectId;
 
-
+/**
+ *  @module playlistRoutes
+ */
 const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
+  
   /**
    * Create Playlist: Create a playlist in database 
+   * @name post/createPlaylist
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
    * @param {string} name - The name of playlist
+   * @param {token} token - the token of user
    */
 
   app.post('/createPlaylist', auth, (req, res, next) => {
@@ -26,8 +34,12 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
   })
   
 
-  /**
-   * Get Playlist: Get into a playlist in library
+   /**
+   * Get Playlist: Get into a playlist
+   * @name get/playlist/:playlistId
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
    * @param {string} id - The id of playlist
    */
   app.get('/playlist/:playlistId', (req, res) => {
@@ -52,8 +64,12 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
     })
   });
 
-  /**
+   /**
    * Like Playlist: Adds the id of an existing playlist to the liking user and the id of him/her to the liked playlist, in case playlist is liked, it ulikes it and vice versa
+   * @name put/playlist/:id
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
    * @param {string} id - the id of playlist
    * @param {token} token - the token of user
    */
@@ -99,6 +115,10 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
 
   /**
    * Get trending playlist: playlist created in database updated with songs played the most
+   * @name get/playlist/trending
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
    */
   app.get('/playlist/trending', (req, res) => {
     var trendPlaylist;
@@ -125,8 +145,12 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
     });
   });
 
-  /**
+   /**
    * Get highest-rated playlist
+   * @name get/playlist/highestRated
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
    */
   app.get('/playlist/highestRated', (req, res) => {
     playlistModel.aggregate(
@@ -141,6 +165,10 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
 
   /**
    * Generate random playlists
+   * @name get/playlist/random
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
    */
   app.get('/playlist/random', (req, res) => {
     var playlistId = 0;
@@ -165,6 +193,11 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
   /**
    * Get region playlists: Each region has a playlist created in database called "Top in 'region'" updated with region songs played the most
    * Name of region is passed in query string => ?region=Egypt for example
+   * @name get/playlist/region
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
+   * @param {string} name - name of region
    */
   app.get('/playlist/region', (req, res) => {
     var qString = req.query;
@@ -198,9 +231,14 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
     });
   });
 
-  /**
-   * Get genre-based playlists: Each genre has a playlist created in database with its name updated with songs having same genre
+   /**
+   * Get genre-based playlists: Each genre has a playlist for it created in database updated with songs having same genre
    * Name of genre is passed in query string => ?genre=Arabic for example
+   * @name get/playlist/genre
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
+   * @param {string} name - name of genre
    */
   app.get('/playlist/genre', (req, res) => {
     var qString = req.query;
@@ -233,9 +271,14 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
     });
   });
 
-  /**
-   * Get mood-based playlists: Each mood has a playlist created in database with its name updated with songs having same mood
+ /**
+   * Get mood-based playlists: Each mood has a playlist created for it in database updated with songs having same mood
    * Name of mood is passed in query string => ?mood=Happy for example
+   * @name get/playlist/mood
+   * @function
+   * @memberof module:playlistRoutes
+   * @inner
+   * @param {string} name - name of mood
    */
   app.get('/playlist/mood', (req, res) => {
     var qString = req.query;

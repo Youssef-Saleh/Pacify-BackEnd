@@ -9,10 +9,25 @@ const bodyParser = require('body-parser');
 
 const auth = require('../middlewares/token_auth');
 
+/**
+ * get all the uploaded songs of an artist request
+ * @module getSongUploadsRoutes
+ */
 const getSongUploadsRoutes= (app, fs) => {
     // showing the uploaded songs
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
+
+    /**
+   * This function gets all the uploaded songs that the user requested for.
+   * @name get/getSongUploads
+   * @function
+   * @memberof module:getSongUploadsRoutes
+   * @inner
+   * @param {*} req requesting the needed info from postman as the following:
+   * @param {*} _id the id of the user (artist) that uploaded the song
+   * @param {Array} res it shows all the uploaded songs of an artist that the user requested.
+   */
 
     app.get('/getSongUploads', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){

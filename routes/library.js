@@ -9,11 +9,25 @@ const bodyParser = require('body-parser');
 
 const auth = require('../middlewares/token_auth');
 
+/**
+ * Login request
+ * @module libraryRoutes
+*/
 
 const libraryRoutes = (app, fs) => {
     // showing the liked albums
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
+
+    /**
+    * @name get/library the user's library
+    * @description returns all the user's liked/created playlists 
+    * @inner
+    * @param {object} req requesting the needed info 
+    * @param {object} res it shows all the Song that the user liked and requested for.
+
+    * @returns {Object} Results all the user's liked/created playlists
+    */
 
     app.get('/library', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){

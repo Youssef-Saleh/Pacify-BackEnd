@@ -8,18 +8,29 @@ const authVar = require('../env_variables/env_vars.json')
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
-
-
-
 const mongoosePort = require('../env_variables/env_vars.json').mongoosePort
 mongoose.connect(mongoosePort);
 
 const auth = require('../middlewares/token_auth');
 const premiumCheck = require('../middlewares/premium_auth');
 
-
+/**
+ * Login request
+ * @module loginRoutes
+ */
 const loginRoutes = (app, fs) => {
   app.use(express.static('./static'))
+
+  /**
+  * @name post/login 
+  * @inner
+  * @description The user enter his email and password to access his webplayer account
+  * @param {object} req requesting the needed info
+  * @param {object} res it shows all the Song that the user liked and requested for.
+  * @param {String} Username The user's Email (username).
+  * @param {String} Password The user's Password.
+  * @returns {string} Generates The user's Token based on the credintials after calling the user type check function
+  */
     
   app.post('/login', (req, res) => {
       var token;

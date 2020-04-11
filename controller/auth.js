@@ -1,10 +1,41 @@
+/** Express router providing authentication related controllers
+ * @module controller/authentication
+ * @requires jsonwebtoken
+ * @requires mongoose
+ * @requires environment-variables
+ */
+
+ /**
+ * mongoose module
+ * @const
+ */
 const mongoose = require ('mongoose');
+/**
+ * jsonwebtoken module
+ * @const
+ */
 const jwt = require('jsonwebtoken');
 
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
-
+/**
+ * This module redirects to authentication functions
+ * 
+ * 
+ * @namespace authFunctions
+ */
 module.exports = {
+  /**
+ * function checks user's credintials
+ * @memberof module:controller/authentication~authFunctions
+ * @name login
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
     login: (req, res, next) => {
       var userCredintials;
       var token;
@@ -25,6 +56,18 @@ module.exports = {
         });
       });
     },
+/**
+ * function validates token
+ * @memberof module:controller/authentication~authFunctions
+ * @name verifyToken
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @param next {Function} The callback function
+ * @return {undefined}
+ */
     verifyToken: (req, res, next) => {
         // Get auth header value
         const bearerHeader = req.headers['authorization'];
