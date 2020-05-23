@@ -22,7 +22,6 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
    * @param {string} name - The name of playlist
    * @param {token} token - the token of user
    */
-
   app.post('/createPlaylist', auth, (req, res, next) => {
 
     if (!req.body.name) {
@@ -42,7 +41,7 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
    * @inner
    * @param {string} id - The id of playlist
    */
-  app.get('/playlist/:playlistId', (req, res) => {
+  app.get('/collection/playlist/:playlistId', (req, res) => {
     mongoose.connection.db.collection('playlists',function(err, collection){
       collection.find({_id: new ObjectId(req.params.playlistId)}).toArray((err, Playlist) => {
         arr = []
@@ -74,6 +73,12 @@ const playlistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
    * @param {token} token - the token of user
    */
   app.put('/playlist/:id', auth, (req, res) => {
+    var UserId;
+    if(typeof req.userId == 'undefined') {
+      UserId = token.users._id
+    } else {
+      UserId = req.userId
+    }
     mongoose.connection.db.collection('users', (err, userModel) =>{
       userModel.find({_id: new ObjectId(req.userId)})
       .toArray((err, User) => {

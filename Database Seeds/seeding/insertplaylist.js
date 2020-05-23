@@ -297,6 +297,15 @@ var playlists = [
         songs: ["Sahran", "Rooh", "Gamda", "Helwa El bedayat"],
         description: "description for the playlist",
         type: "trending"
+    }),
+
+    // Random
+    new Playlist({
+        name: "Random Playlist",
+        url : "https://travel.home.sndimg.com/content/dam/images/travel/stock/2017/3/24/0/Shutterstock_393700531_BeachPlaylistGraphic.jpg.rend.hgtvcom.616.462.suffix/1491594774042.jpeg",
+        songs: ["Sahran", "Rooh", "Gamda", "Helwa El bedayat"],
+        description: "description for the playlist",
+        type: "random"
     })
 ];
 

@@ -15,7 +15,7 @@ const getAlbumSongsRoutes = require ('./getAlbumSongs');
 const getSongRoutes = require ('./getSong')
 const remixesRoutes = require ('./remixes');
 const getAlbumRoutes = require ('./getAlbum');
-const playlistRoutes = require ('./playlistRequests');
+// const playlistRoutes = require ('./playlistRequests');
 const signupRoutes = require ('./signup');
 const passwordRoutes = require ('./passwordReset');
 const firstTimeRoutes = require ('./firstTime');
@@ -24,6 +24,14 @@ const getGenreRoutes = require ('./getGenres');
 const libraryRoutes = require('./library');
 const homeRoutes = require('./home')
 const allPlaylists = require('./allplaylistst');
+const getPlaylistRoutes = require('./getPlaylist');
+const propBasedRoutes = require('./getPropBasedPlaylist');
+const createPlaylistRoute = require('./createPlaylist');
+const likePlaylistRoute = require('./likePlaylist');
+const deletePlaylistRoute = require('./deletePlaylist');
+const deleteSongFromPlaylistRoute = require('./deleteSongFromPlaylist');
+const downloadApkFileRoute = require('./downloadApkFile');
+const homePlaylistsRoute = require ('./homeRequests');
 
 var Song = require('../Database Seeds/models/song');
 var User = require('../Database Seeds/models/user');
@@ -46,7 +54,7 @@ const appRouter = (app, fs) => {
     firstTimeRoutes(app, fs, User, Property);
     accountRoutes(app, fs, User);
     passwordRoutes(app, fs, User);
-    playlistRoutes(app, fs, Song, Property, playlistModel);
+    // playlistRoutes(app, fs, Song, Property, playlistModel);
     createSongRoutes(app, fs, Song);
     createAlbumRoutes(app, fs);
     getSongUploadsRoutes(app,fs);
@@ -61,6 +69,14 @@ const appRouter = (app, fs) => {
     libraryRoutes(app, fs);
     homeRoutes(app, fs);
     allPlaylists(app, fs);
+    getPlaylistRoutes(app, fs,Song, Property, playlistModel);
+    propBasedRoutes(app, fs,Song, Property, playlistModel);
+    createPlaylistRoute(app, fs,Song, Property, playlistModel);
+    likePlaylistRoute(app, fs,Song, Property, playlistModel);
+    deletePlaylistRoute(app, fs,Song, Property, playlistModel);
+    deleteSongFromPlaylistRoute(app, fs,Song, Property, playlistModel);
+    downloadApkFileRoute(app, fs,Song, Property, playlistModel);
+    homePlaylistsRoute(app, fs,Song, Property, playlistModel);
 };
 
 module.exports = appRouter;
