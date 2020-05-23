@@ -1,29 +1,40 @@
 const mongoose = require('mongoose');
 var ObjectId = require('mongoose').Types.ObjectId;
-mongoose.connect('mongodb://localhost:27017/testpacify');
+
+const mongoosePort = require('../env_variables/env_vars.json').mongoosePort
+mongoose.connect(mongoosePort);
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
-// create an instance of express to serve our end points
-const app = express();
+const auth = require('../middlewares/token_auth');
 
-// we'll load up node's built in file system helper library here
-// (we'll be using this later to serve our JSON files
-const fs = require('fs');
-
-// configure our express instance with some body-parser settings 
-// including handling JSON data
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-const getSongUploads = require('../Database Seeds/models/song');
+/**
+ * get all the uploaded songs of an artist request
+ * @module getSongUploadsRoutes
+ */
 const getSongUploadsRoutes= (app, fs) => {
     // showing the uploaded songs
-    app.get('/getSongUploads', (req, res) => {
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
+
+    /**
+   * This function gets all the uploaded songs that the user requested for.
+   * @name get/getSongUploads
+   * @function
+   * @memberof module:getSongUploadsRoutes
+   * @inner
+   * @param {*} req requesting the needed info from postman as the following:
+   * @param {*} _id the id of the user (artist) that uploaded the song
+   * @param {Array} res it shows all the uploaded songs of an artist that the user requested.
+   */
+
+    app.get('/getSongUploads', auth, (req, res) => {
         mongoose.connection.db.collection('users',function(err, collection){
             if (err){
                 throw err;
             }
-             collection.find({_id:new ObjectId(req.body.userId)}, {type: "Artist"}).toArray(function(err,docs){
+             collection.find({_id:new ObjectId(req.userId)}, {type: "Artist"}).toArray(function(err,docs){
 
                 if (err){
                     throw err;

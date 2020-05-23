@@ -1,7 +1,8 @@
 var Property = require ('../models/property');
 var mongoose = require ('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/testpacify');
+var url = require('../../env_variables/env_vars.json').mongoosePort;
+mongoose.connect(url);
 
 var properties = [
     //////////////////////////////////////////////////
@@ -28,7 +29,7 @@ var properties = [
     new Property({
         name: "Country",
         type: "Genre"
-
+        
     }),
     new Property({
         name: "Electronic",
@@ -62,7 +63,7 @@ var properties = [
         type: "Genre"
     }),
     new Property({
-        name: "R&B",
+        name: "R_B",
         type: "Genre"
 
     }),
@@ -76,7 +77,7 @@ var properties = [
 
     }),
     new Property({
-        name: "TV&Movies",
+        name: "TV_Movies",
         type: "Genre"
     }),
 
@@ -95,7 +96,6 @@ var properties = [
     new Property({
         name: "Calm",
         type: "mood"
-
     }),
     new Property({
         name: "Dark",
@@ -104,7 +104,6 @@ var properties = [
     new Property({
         name: "Dramatic",
         type: "mood"
-
     }),
     new Property({
         name: "Funky",
@@ -113,7 +112,6 @@ var properties = [
     new Property({
         name: "Happy",
         type: "mood"
-
     }),
     new Property({
         name: "Inspirational",

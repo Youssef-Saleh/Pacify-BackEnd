@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controller/account.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controller/account.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** Express router providing account overview related controllers
+ * @module controller/account
+ * @requires jsonwebtoken
+ * @requires mongoose
+ * @requires environment-variables
+ */
+
+/**
+ * mongoose module
+ * @const
+ */
+const mongoose = require ('mongoose');
+const nodemailer = require('nodemailer');
+/**
+ * jsonwebtoken module
+ * @const
+ */
+const jwt = require('jsonwebtoken');
+
+mongoose.connect('mongodb://localhost:27017/testpacify');
+
+const transporter = nodemailer.createTransport({
+    host: "smtp.zoho.com",
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+      user: "pacify@pacify.tech", // generated ethereal user
+      pass: "26855765Pacify!" // generated ethereal password
+    }
+});
+
+/**
+ * This module redirects to account settings
+ * 
+ * 
+ * @namespace accountFunctions
+ */
+module.exports = {
+/**
+ * function retrieves specific user data for account overview
+ * @memberof module:controller/account~accountFunctions
+ * @name retrieveOverview
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
+    retrieveOverview: (req, res, User) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              if(!authData.user.fbuser) {
+                res.json(authData.user);
+              }
+              else {
+                res.json(authData.user);
+              }
+              
+            }
+          });
+    },
+/**
+ * function retrieves specific user data for account profile
+ * @memberof module:controller/account~accountFunctions
+ * @name retrieveProfile
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
+    retrieveProfile: (req, res, User) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              if(!authData.user.fbuser) {
+                res.json(authData.user);
+        
+              }
+              else {
+                res.json(authData.user);
+        
+              }
+              
+            }
+          });
+    },
+/**
+ * function updates specific user data for account overview
+ * @memberof module:controller/account~accountFunctions
+ * @name updateProfile
+ * @function
+ * @param req {Object} The request.
+ * @param res {Object} The response.
+ * @param User {Object} The user schema
+ * @param req.body {Object} The JSON payload.
+ * @return {undefined}
+ */
+    updateProfile: (req, res, User) => {
+        jwt.verify(req.token, 'secretkey', (err, authData) => {
+            if(err) {
+              //An error page to be rendered
+              res.sendStatus(403);
+            } else {
+              //console.log(req.body.country);
+              //console.log(authData);
+              if(authData.user.fbuser){
+                mongoose.connection.db.collection('users', function (err, collection) {
+                  collection.updateOne({email: authData.user.email}, {$set: {country: req.body.country, phone: req.body.phone}})
+                  if(err){
+                      res.send(err);
+                  }
+                  else{
+                    mongoose.connection.db.collection('users', function (err, collection) {
+                      collection.find({ 'email' : authData.user.email })
+                      .toArray((err, docs) => {
+                        if(docs.length == 0){
+                          res.send("No user exists with the same email or username!");
+                        } else {
+                          //res.send(docs);
+                          var user = docs[0];
+                          //console.log(docs);
+                          jwt.sign({user: user}, 'secretkey', { expiresIn: '50m' }, (err, token) => {
+                            res.send({token: token});
+        
+                          });
+                          
+                        }
+                      });
+                    });
+                  }
+                  
+                });
+        
+              }
+              else{
+                mongoose.connection.db.collection('users', function (err, collection) {
+                  mongoose.connection.db.collection('users', function (err, collection) {
+                    collection.find({ email: req.body.email})
+                    .toArray((err, docs) => {
+                      if(docs.length == 0){
+                        collection.updateOne({_id: mongoose.Types.ObjectId(authData.user._id)}, {$set: {country: req.body.country, phone: req.body.phone, email: req.body.email, password: req.body.password, gender: req.body.gender}})
+                        if(err){
+                            res.send(err);
+                        }
+                        else{
+                          mongoose.connection.db.collection('users', function (err, collection) {
+                            collection.find({ _id: mongoose.Types.ObjectId(authData.user._id)})
+                            .toArray((err, docs) => {
+                              if(docs.length == 0){
+                                res.send("No user exists with the same email or username!");
+                              } else {
+                                //res.send(docs);
+                                var user = docs[0];
+                                //console.log(docs);
+                                jwt.sign({user: user}, 'secretkey', { expiresIn: '50m' }, (err, token) => {
+                                  res.send({token: token});
+              
+                                });
+                                
+                              }
+                            });
+                          });
+                        }
+                      } else {
+                        res.send("Existing email!")
+                        
+                      }
+                    });
+                  });
+                  
+                  
+                });
+              } 
+            }
+          });
+    }
+
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addSongsToAlbumRoutes.html">addSongsToAlbumRoutes</a></li><li><a href="module-browseRoutes.html">browseRoutes</a></li><li><a href="module-controller_account.html">controller/account</a></li><li><a href="module-controller_authentication.html">controller/authentication</a></li><li><a href="module-controller_firstlogin.html">controller/firstlogin</a></li><li><a href="module-controller_password-reset.html">controller/password-reset</a></li><li><a href="module-controller_signup.html">controller/signup</a></li><li><a href="module-createAlbumRoutes.html">createAlbumRoutes</a></li><li><a href="module-createSongRoutes.html">createSongRoutes</a></li><li><a href="module-getAlbumRoutes.html">getAlbumRoutes</a></li><li><a href="module-getAlbumSongsRoutes.html">getAlbumSongsRoutes</a></li><li><a href="module-getAlbumUploadsRoutes.html">getAlbumUploadsRoutes</a></li><li><a href="module-getGenreRoutes.html">getGenreRoutes</a></li><li><a href="module-getSongRoutes.html">getSongRoutes</a></li><li><a href="module-getSongUploadsRoutes.html">getSongUploadsRoutes</a></li><li><a href="module-libraryRoutes.html">libraryRoutes</a></li><li><a href="module-likedAlbumsRoutes.html">likedAlbumsRoutes</a></li><li><a href="module-likedArtistsRoutes.html">likedArtistsRoutes</a></li><li><a href="module-likedSongsRoutes.html">likedSongsRoutes</a></li><li><a href="module-loginRoutes.html">loginRoutes</a></li><li><a href="module-playlistRoutes.html">playlistRoutes</a></li><li><a href="module-rateSongsRoutes.html">rateSongsRoutes</a></li><li><a href="module-remixesRoutes.html">remixesRoutes</a></li><li><a href="module-routers_account.html">routers/account</a></li><li><a href="module-routers_first-login.html">routers/first-login</a></li><li><a href="module-routers_password-reset.html">routers/password-reset</a></li><li><a href="module-routers_signup.html">routers/signup</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-controller_account-accountFunctions.html">accountFunctions</a></li><li><a href="module-controller_authentication-authFunctions.html">authFunctions</a></li><li><a href="module-controller_firstlogin-firstTimeRoutes.html">firstTimeRoutes</a></li><li><a href="module-controller_password-reset-passwordFunctions.html">passwordFunctions</a></li><li><a href="module-controller_signup-signupFunctions.html">signupFunctions</a></li><li><a href="module-routers_account-accountRoutes.html">accountRoutes</a></li><li><a href="module-routers_first-login-firstRoutes.html">firstRoutes</a></li><li><a href="module-routers_password-reset-passwordRoutes.html">passwordRoutes</a></li><li><a href="module-routers_signup-signupRoutes.html">signupRoutes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 11 2020 20:28:07 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
