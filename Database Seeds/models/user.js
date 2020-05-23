@@ -23,7 +23,9 @@ var schema = new Schema({
     likedArtists: {type:Array, default: []},
     followers:{type: Array, default: []},
     uploadedSongs:{type: Array, default: []},
-    uploadedAlbums: {type: Array, default: []}
+    uploadedAlbums: {type: Array, default: []},
+    realName: {type: String, default: null},
+    nationalID: {type: String, default: null}
 });
 
 module.exports = mongoose.model('User', schema);
