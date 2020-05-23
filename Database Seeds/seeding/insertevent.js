@@ -1,7 +1,8 @@
 var Eventlog = require ('../models/eventlog');
 var mongoose = require ('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/testpacify');
+var url = require('../../env_variables/env_vars.json').mongoosePort;
+mongoose.connect(url);
 
 var events = [
     new Eventlog({
