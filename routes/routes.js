@@ -26,6 +26,7 @@ const homeRoutes = require('./home')
 const allPlaylists = require('./allplaylistst');
 const upgradePremium = require ('./upgradePremium');
 const becomeArtist = require ('./becomeArtist');
+const retrieveActivity = require ('./retrieveActivity');
 
 var Song = require('../Database Seeds/models/song');
 var User = require('../Database Seeds/models/user');
@@ -65,6 +66,7 @@ const appRouter = (app, fs) => {
     allPlaylists(app, fs);
     upgradePremium(app, fs);
     becomeArtist(app, fs);
+    retrieveActivity(app, fs);
 };
 
 module.exports = appRouter;
