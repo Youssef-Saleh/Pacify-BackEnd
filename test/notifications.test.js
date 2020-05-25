@@ -59,7 +59,7 @@ describe('event getByAffectedID ', () => {
 });
 
 
-
+ 
 
 /**
  * Seed the database with products.

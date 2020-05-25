@@ -19,7 +19,7 @@ beforeAll(async () => {
 beforeEach(async () => {
     await createEvents();
 });
-
+ 
 /**
  * Clear all test data after every test.
  */
@@ -61,15 +61,15 @@ describe('user getUserByEmail ', () => {
 describe('user updateUser ', () => {
     
     
-     
+    
     /**
      * Should return the correct User.
      */
     it('should retrieve correct user if user email matches after he is premium', async () => {
         var updateFilter = {email: "user1@gmail.com"};
-        var query = {$set: {type: "Premium"}};
+        var query = {$set: {type: "Artist"}};
         await userServices.updateUser(updateFilter, query);    
-        const foundUser = await userServices.getUsers({email: "user1@gmail.com", type: "Premium"});
+        const foundUser = await userServices.getUsers({email: "user1@gmail.com", type: "Artist"});
         //console.log(foundUser);
         expect(foundUser[0]._id).toStrictEqual(freeUserId);
         expect(foundUser[0].email).toBe(freeUser.email);
