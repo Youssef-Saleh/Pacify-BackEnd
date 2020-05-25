@@ -11,5 +11,6 @@
       }
     },
     "senderAddress": "\"Pacify\" <pacify@pacify.tech>",
-    "receiverAddress": "ahmadosgalal@gmail.com"
+    "receiverAddress": "ahmadosgalal@gmail.com",
+    "mailURL": "http://localhost:5000"
 }

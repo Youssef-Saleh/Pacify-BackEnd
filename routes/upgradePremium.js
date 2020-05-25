@@ -21,7 +21,7 @@ const tokenhandler = require ('../controller/auth');
  * premium controller module
  * @const
  */
-const controller = require ('../controller/premium');
+const controller = require ('../controller/premiumController');
 
 /**
  * environment variables module
@@ -32,7 +32,7 @@ mongoose.connect(mongoosePort);
 
 
 /**
- * This function redirects to password-reset and change
+ * This function redirects to premium upgrade
  * 
  * 
  * @namespace premium
@@ -41,7 +41,18 @@ const premiumRoutes = (app, fs, User) => {
 /**
  * Route serving premium form.
  * @memberof module:routers/premium~premiumRoutes
- * @name post/premium
+ * @name get/premium
+ * @function
+ * @param {string} path - Express path
+ * @param {callback} middleware - Express middleware.
+ */
+app.get ('/premium' , tokenhandler.verifyToken, (req, res) => {controller.checkUser(req, res, User)});  // calling the controller function
+ 
+
+/**
+ * Route serving premium form.
+ * @memberof module:routers/premium~premiumRoutes
+ * @name put/premium
  * @function
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
@@ -60,3 +71,4 @@ const premiumRoutes = (app, fs, User) => {
 }
 
 module.exports = premiumRoutes;
+

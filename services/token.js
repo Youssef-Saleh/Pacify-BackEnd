@@ -1,5 +1,5 @@
 /** Express router providing token related services
- * @module services/tokenValidation
+ * @module services/token
  * @requires jsonwebtoken
  */
 /**
@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 
 /**
  * function checks the validity of the token
- * @memberof module:services/tokenValidation
+ * @memberof module:services/token
  * @name validateToken
  * @function
  * @param token {String} The token
@@ -28,4 +28,14 @@ exports.validateToken = async function (token, key) {
         throw ("Invalid token!");
     }
 
+}
+
+exports.signToken = async function (data, key) {
+    try {
+        var user= data;
+        var token = await jwt.sign({user}, key, { expiresIn: '50m' });
+        return token;
+    } catch (error) {
+        throw (error);
+    }
 }
