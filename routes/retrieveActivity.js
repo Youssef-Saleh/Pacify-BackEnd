@@ -21,7 +21,7 @@ const tokenhandler = require ('../controller/auth');
  * Activity log controller module
  * @const
  */
-const controller = require ('../controller/retrieveActivity');
+const controller = require ('../controller/activityLogController');
 
 /**
  * environment variables module
