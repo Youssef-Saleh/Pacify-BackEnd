@@ -15,7 +15,7 @@ const tokenhandler = require ('../controller/auth');
  * becomd an artist controller module
  * @const
  */
-const controller = require ('../controller/becomeArtist');
+const controller = require ('../controller/becomeArtistController');
 /**
  * mongoose module
  * @const
@@ -45,7 +45,7 @@ const becomeArtistRoutes = (app, fs, User) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-    app.get('/becomeArtist', tokenhandler.verifyToken, (req, res) => {controller.retrieveUser(req, res, User)});
+    app.get('/becomeArtist', tokenhandler.verifyToken, (req, res, next) => {controller.retrieveUser(req, res, next)});
 
 /**
  * Route serving account profile form.
@@ -55,7 +55,7 @@ const becomeArtistRoutes = (app, fs, User) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */ 
-    app.put('/becomeArtist', tokenhandler.verifyToken, (req, res) => {controller.artistUpgrade(req, res, User)});
+    app.put('/becomeArtist', tokenhandler.verifyToken, (req, res, next) => {controller.artistUpgrade(req, res, next)});
 
 }
 

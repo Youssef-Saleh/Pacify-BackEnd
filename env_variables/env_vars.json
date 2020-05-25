@@ -1,8 +1,15 @@
 {
     "KEY": "secretkey",
     "mongoosePort" : "mongodb://localhost:27017/testpacify",
-    "auth": {
+    "transporter": {
+      "host": "smtp.zoho.com",
+      "port": 465,
+      "secure": true, 
+      "auth": {
         "user": "pacify@pacify.tech",
         "pass": "26855765Pacify!" 
       }
+    },
+    "senderAddress": "\"Pacify\" <pacify@pacify.tech>",
+    "receiverAddress": "ahmadosgalal@gmail.com"
 }
