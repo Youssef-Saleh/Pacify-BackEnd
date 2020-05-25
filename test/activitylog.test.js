@@ -35,7 +35,7 @@ afterAll(async () => {
 });
 
 /**
- * Product getById test suite.
+ * Activity log test suite.
  */
 describe('event getByPerformerID ', () => {
     /**
@@ -57,6 +57,9 @@ describe('event getByPerformerID ', () => {
         expect(foundevent[0].Type).toBe(followEvent.Type);
     });
 });
+
+
+
 
 /**
  * Seed the database with products.
