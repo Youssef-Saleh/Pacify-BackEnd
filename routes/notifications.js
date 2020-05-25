@@ -21,7 +21,7 @@ const tokenhandler = require ('../controller/auth');
  * Notifications controller module
  * @const
  */
-const controller = require ('../controller/notifications');
+const controller = require ('../controller/notificationsController');
 
 /**
  * environment variables module
@@ -46,7 +46,7 @@ const notificationsRoutes = (app, fs, User) => {
  * @param {string} path - Express path
  * @param {callback} middleware - Express middleware.
  */
-  app.get ('/notifications' , tokenhandler.verifyToken, (req, res) => {controller.getNofitifications(req, res, User)});  // calling the controller function
+  app.get ('/notifications' , tokenhandler.verifyToken, (req, res) => {controller.getNotifications(req, res, User)});  // calling the controller function
  
 }
 
