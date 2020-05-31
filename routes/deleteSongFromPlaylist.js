@@ -27,9 +27,9 @@ const deleteSongFromPlaylistRoute = (app, fs, songModel, propertyModel, playlist
    * @function
    * @memberof module:playlistRoutes
    * @inner
-   * @param req
-   * @param res
-   * @param next
+   * @param {object} req
+   * @param {object} res
+   * @param {object} next
   */
   function deleteSongFromPlaylist(req, res, next) {
     var songName

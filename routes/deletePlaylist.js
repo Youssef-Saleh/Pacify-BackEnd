@@ -27,9 +27,9 @@ const deletePlaylistRoute = (app, fs, songModel, propertyModel, playlistModel) =
    * @function
    * @memberof module:playlistRoutes
    * @inner
-   * @param req
-   * @param res
-   * @param next
+   * @param {object} req 
+   * @param {object} res
+   * @param {object} next
   */
   function deletePlaylist(req, res, next) {
     playlistModel.findByIdAndRemove({_id: req.params.playlistId}).then((Playlist) => {

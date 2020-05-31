@@ -21,6 +21,16 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
     
   app.get('/homePlaylists', homePlaylists)
 
+  /**
+   * homePlaylists: collects different types of playlists in one array
+   * @name homePlaylists
+   * @function
+   * @memberof module:homePlaylistsRoutes
+   * @inner
+   * @param {object} req 
+   * @param {object} res
+   * @param {object} next
+  */
   function homePlaylists(req, res, next) {
     var playlistArray = []
     var playlistTypes = ['genreBased', 'moodBased', 'region','trending'] 
@@ -40,6 +50,15 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
     })
   }
 
+  /**
+   * getThePlayist: gets types of playists passed to it in an array and returns them in another array
+   * @name getThePlayist
+   * @function
+   * @memberof module:homePlaylistsRoutes
+   * @inner
+   * @param {array} typesArr - array of playlist types
+   * @param {array} arr - array of playlists
+  */
   function getThePlayist(typesArr, arr) {
     var songsArray = []
     playlistModel.find({type: {$in: typesArr}}).then((Playlist) => {  
@@ -49,6 +68,14 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
     })
   }
 
+  /**
+   * getHighestRatedPlaylist: pushes the highest rated playlist in the passed array
+   * @name getHighestRatedPlaylist
+   * @function
+   * @memberof module:homePlaylistsRoutes
+   * @inner
+   * @param {array} arr - array to push the playlist
+  */
   function getHighestRatedPlaylist(arr) {
     playlistModel.aggregate(
         [
@@ -60,6 +87,14 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
     });
   }
 
+  /**
+   * getRandomPlaylist: creates a new random playlist in database and pushes it in the passed array
+   * @name getRandomPlaylist
+   * @function
+   * @memberof module:homePlaylistsRoutes
+   * @inner
+   * @param {array} arr - array to push the playlist
+  */
   function getRandomPlaylist(arr) {
     var playlistId = 0;
     songModel.aggregate(

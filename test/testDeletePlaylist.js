@@ -49,7 +49,7 @@ describe('Playlist', () => {
         name: 'myPlaylist',
         songs: ['mySong']
       };
-      mongoose.connection.db.collection('songs').insertOne(song).then((Song) => { 
+      await mongoose.connection.db.collection('songs').insertOne(song).then((Song) => { 
         songId = Song.insertedId;
       });
       await mongoose.connection.db.collection('playlists').insertOne(playlist).then((Playlist) => { 
