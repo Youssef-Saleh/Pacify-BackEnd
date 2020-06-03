@@ -31,25 +31,6 @@ const addSongsToAlbumRoutes = (app, fs) => {
      * @param {string} res it tells the artist either the song was added successfully or an error occured
      */
     app.put('/addSongsToAlbum', auth, (req, res, next) => {
-        mongoose.connection.db.collection('users',function(err, collection){
-            if (err){
-                throw err;
-            }
-            collection.find({_id:new ObjectId (req.userId)},{type:"Artist"}).toArray(function(err,docs){
-                if (err) {
-                    throw err;
-                }else{
-                    mongoose.connection.db.collection('songs', function(err, collection3){
-                        if(err){
-                            throw err;
-                        }
-                    });
-                    collection.updateOne(
-                        {_id: new ObjectId(req.userId)},
-                        {$push:{ uploadedSongs :req.body.songName}}
-                    )
-                 }
-             });
             mongoose.connection.db.collection('albums',function(err, collection2){
                 if (err){
                     throw err;
@@ -62,7 +43,6 @@ const addSongsToAlbumRoutes = (app, fs) => {
 
                 });
             });
-        });
         res.send("song added to album");
       });
 
