@@ -11,6 +11,13 @@ chai.should();
 chai.use(chaiHttp);
 
 describe('Playlist', () => {
+
+  afterEach((done) => {
+		userModel.remove({}, (err) => { 
+		  done();		   
+		});		
+	});
+
  /**
    * Test delete playlist
    */
