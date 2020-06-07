@@ -15,17 +15,20 @@ app.use(bodyParser.urlencoded({extended : false}));
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
 
-
+/**
+ *  @module createPlaylistRoute
+ */
 const createPlaylistRoute = (app, fs, songModel, propertyModel, playlistModel) => {
 
   /**
    * Create Playlist: Create a playlist in database 
    * @name post/createPlaylist
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:createPlaylistRoute
    * @inner
-   * @param {string} name - The name of playlist
-   * @param {token} token - the token of user
+   * @param {object} req It has playlist name and token of user
+   * @param {object} res It responds with created playlist
+   * @param {object} next If there is an error
   */
   app.post('/createPlaylist', auth, (req, res, next) => {
 

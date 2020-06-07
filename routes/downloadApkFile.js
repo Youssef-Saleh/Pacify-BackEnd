@@ -28,9 +28,9 @@ const downloadApkFileRoute = (app, fs, songModel, propertyModel, playlistModel) 
    * @function
    * @memberof module:downloadApkFileRoute
    * @inner
-   * @param {object} req
-   * @param {object} res
-   * @param {object} next
+   * @param {object} req request body
+   * @param {object} res It responds with downloading required file
+   * @param {object} next If there is an error
   */
   function downloadApkFile(req, res, next) {
     res.download(__dirname + '/APK File/Netflix.xapk')

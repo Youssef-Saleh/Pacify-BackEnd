@@ -14,7 +14,9 @@ app.use(bodyParser.urlencoded({extended : false}));
 mongoose.connect('mongodb://localhost:27017/testpacify');
 
 
-
+/**
+ *  @module getPropBasedPlaylistRoutes
+ */
 const PropBasedPlaylistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
 
   /**
@@ -22,9 +24,10 @@ const PropBasedPlaylistRoutes = (app, fs, songModel, propertyModel, playlistMode
    * Name of region is passed in query string => ?region=Egypt for example
    * @name get/playlist/region
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPropBasedPlaylistRoutes
    * @inner
-   * @param {string} name - name of region
+   * @param {object} req It has type of required playlist
+   * @param {object} res It responds with required playlist
    */
   app.get('/playlist/region', (req, res) => {
     var qString = req.query;
@@ -64,9 +67,10 @@ const PropBasedPlaylistRoutes = (app, fs, songModel, propertyModel, playlistMode
    * Name of genre is passed in query string => ?genre=Arabic for example
    * @name get/playlist/genre
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPropBasedPlaylistRoutes
    * @inner
-   * @param {string} name - name of genre
+   * @param {object} req It has type of required playlist
+   * @param {object} res It responds with required playlist
    */
   app.get('/playlist/genre', (req, res) => {
     var qString = req.query;
@@ -105,9 +109,10 @@ const PropBasedPlaylistRoutes = (app, fs, songModel, propertyModel, playlistMode
    * Name of mood is passed in query string => ?mood=Happy for example
    * @name get/playlist/mood
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPropBasedPlaylistRoutes
    * @inner
-   * @param {string} name - name of mood
+   * @param {object} req It has type of required playlist
+   * @param {object} res It responds with required playlist
    */
   app.get('/playlist/mood', (req, res) => {
     var qString = req.query;

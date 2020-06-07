@@ -16,7 +16,7 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 
 /**
- *  @module playlistRoutes
+ *  @module likePlaylistRoute
  */
 const likePlaylistRoute = (app, fs, songModel, propertyModel, playlistModel) => {
   
@@ -24,10 +24,10 @@ const likePlaylistRoute = (app, fs, songModel, propertyModel, playlistModel) => 
    * Like Playlist: Adds the id of an existing playlist to the liking user and the id of him/her to the liked playlist, in case playlist is liked, it ulikes it and vice versa
    * @name put/playlist/:id
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:likePlaylistRoute
    * @inner
-   * @param {string} id - the id of playlist
-   * @param {token} token - the token of user
+   * @param {object} req It has playlist id and token of user
+   * @param {object} res It responds with a message when playlist is liked or not
    */
   app.put('/playlist/:id', auth, (req, res) => {
     var UserId;

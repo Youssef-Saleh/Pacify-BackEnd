@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 
 /**
- *  @module playlistRoutes
+ *  @module deletePlaylistRoute
  */
 const deletePlaylistRoute = (app, fs, songModel, propertyModel, playlistModel) => {
 
@@ -25,11 +25,11 @@ const deletePlaylistRoute = (app, fs, songModel, propertyModel, playlistModel) =
    * Delete Playlist: deletes a playlist in database 
    * @name deletePlaylist
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:deletePlaylistRoute
    * @inner
-   * @param {object} req 
-   * @param {object} res
-   * @param {object} next
+   * @param {object} req It has playlist id
+   * @param {object} res It responds with a message when deleted
+   * @param {object} next If there is an error
   */
   function deletePlaylist(req, res, next) {
     playlistModel.findByIdAndRemove({_id: req.params.playlistId}).then((Playlist) => {

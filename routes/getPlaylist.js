@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 
 /**
- *  @module playlistRoutes
+ *  @module getPlaylistRoutes
  */
 const getPlaylistRoutes = (app, fs, songModel, propertyModel, playlistModel) => {
   
@@ -23,9 +23,10 @@ const getPlaylistRoutes = (app, fs, songModel, propertyModel, playlistModel) => 
    * Get Playlist: Get into a playlist
    * @name get/collection/playlist/:playlistId
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPlaylistRoutes
    * @inner
-   * @param {string} id - The id of playlist
+   * @param {object} req It has playlist id
+   * @param {object} res It responds with songs of required playlist
    */
   app.get('/collection/playlist/:playlistId', (req, res) => {
     mongoose.connection.db.collection('playlists',function(err, collection){
@@ -54,8 +55,10 @@ const getPlaylistRoutes = (app, fs, songModel, propertyModel, playlistModel) => 
    * Get trending playlist: playlist created in database updated with songs played the most
    * @name get/playlist/trending
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPlaylistRoutes
    * @inner
+   * @param {object} req request body
+   * @param {object} res It responds with trending playlist
    */
   app.get('/playlist/trending', (req, res) => {
     var trendPlaylist;
@@ -87,8 +90,10 @@ const getPlaylistRoutes = (app, fs, songModel, propertyModel, playlistModel) => 
    * Get highest-rated playlist
    * @name get/playlist/highestRated
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPlaylistRoutes
    * @inner
+   * @param {object} req request body
+   * @param {object} res It responds with highest-rated playlist
    */
   app.get('/playlist/highestRated', (req, res) => {
     playlistModel.aggregate(
@@ -106,8 +111,10 @@ const getPlaylistRoutes = (app, fs, songModel, propertyModel, playlistModel) => 
    * Generate random playlists
    * @name get/playlist/random
    * @function
-   * @memberof module:playlistRoutes
+   * @memberof module:getPlaylistRoutes
    * @inner
+   * @param {object} req request body
+   * @param {object} res It responds with a random playlist
    */
   app.get('/playlist/random', (req, res) => {
     var playlistId = 0;

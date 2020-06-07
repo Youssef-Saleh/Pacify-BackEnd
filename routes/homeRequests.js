@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 
 /**
- *  @module homePlaylistsRoutes
+ *  @module homePlaylistsRoute
  */
 const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) => {
     
@@ -25,11 +25,11 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
    * homePlaylists: collects different types of playlists in one array
    * @name homePlaylists
    * @function
-   * @memberof module:homePlaylistsRoutes
+   * @memberof module:homePlaylistsRoute
    * @inner
-   * @param {object} req 
-   * @param {object} res
-   * @param {object} next
+   * @param {object} req request body
+   * @param {object} res It responds with all required playlists
+   * @param {object} next If there is an error
   */
   function homePlaylists(req, res, next) {
     var playlistArray = []
@@ -54,7 +54,7 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
    * getThePlayist: gets types of playists passed to it in an array and returns them in another array
    * @name getThePlayist
    * @function
-   * @memberof module:homePlaylistsRoutes
+   * @memberof module:homePlaylistsRoute
    * @inner
    * @param {array} typesArr - array of playlist types
    * @param {array} arr - array of playlists
@@ -72,7 +72,7 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
    * getHighestRatedPlaylist: pushes the highest rated playlist in the passed array
    * @name getHighestRatedPlaylist
    * @function
-   * @memberof module:homePlaylistsRoutes
+   * @memberof module:homePlaylistsRoute
    * @inner
    * @param {array} arr - array to push the playlist
   */
@@ -91,7 +91,7 @@ const homePlaylistsRoute = (app, fs, songModel, propertyModel, playlistModel) =>
    * getRandomPlaylist: creates a new random playlist in database and pushes it in the passed array
    * @name getRandomPlaylist
    * @function
-   * @memberof module:homePlaylistsRoutes
+   * @memberof module:homePlaylistsRoute
    * @inner
    * @param {array} arr - array to push the playlist
   */

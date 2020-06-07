@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: library.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: library.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const mongoose = require('mongoose');
+var ObjectId = require('mongoose').Types.ObjectId;
+
+const mongoosePort = require('../env_variables/env_vars.json').mongoosePort
+mongoose.connect(mongoosePort);
+
+const express = require('express');
+const bodyParser = require('body-parser');
+
+const auth = require('../middlewares/token_auth');
+
+/**
+ * Login request
+ * @module libraryRoutes
+*/
+
+const libraryRoutes = (app, fs) => {
+    // showing the liked albums
+    app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: false }));
+
+    /**
+    * @name get/library the user's library
+    * @description returns all the user's liked/created playlists 
+    * @inner
+    * @param {object} req requesting the needed info 
+    * @param {object} res it shows all the Song that the user liked and requested for.
+
+    * @returns {Object} Results all the user's liked/created playlists
+    */
+
+    app.get('/library', auth, (req, res) => {
+        mongoose.connection.db.collection('users',function(err, collection){
+            collection.find({_id:new ObjectId(req.userId)}).toArray(function(err,docs){
+
+                if (err) {
+                    throw err;
+                }
+
+                liked = []
+                created = []
+
+                for (var i = 0; i &lt; docs[0].likedPlaylists.length; i++) {
+                    liked.push(new ObjectId(docs[0].likedPlaylists[i]))
+                }
+
+                mongoose.connection.db.collection('playlists',function(err, playlistModel){
+                    playlistModel.find({creator: new ObjectId(req.userId)}).toArray(function(err,result){
+
+                        for (var i = 0; i &lt; result.length; i++) {
+                            created.push(new ObjectId(result[i]._id))
+                        }
+                
+                        if (err) {
+                            throw err;
+                        }
+                        playlistModel.find({_id : {$in:liked}}).toArray((err, likedArr) => {
+                            playlistModel.find({_id : {$in:created}}).toArray((err, createdArr) => {
+
+                                out = {
+                                    'likedPlaylists' : likedArr,
+                                    'createdPlaylists' : createdArr,
+                                }
+                                res.send(out);
+                            })
+                        })
+                    })
+                });
+            });
+        });
+    });
+};
+
+module.exports = libraryRoutes;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-addSongsToAlbumRoutes.html">addSongsToAlbumRoutes</a></li><li><a href="module-browseRoutes.html">browseRoutes</a></li><li><a href="module-createAlbumRoutes.html">createAlbumRoutes</a></li><li><a href="module-createPlaylistRoute.html">createPlaylistRoute</a></li><li><a href="module-createSongRoutes.html">createSongRoutes</a></li><li><a href="module-deletePlaylistRoute.html">deletePlaylistRoute</a></li><li><a href="module-deleteSongFromPlaylistRoute.html">deleteSongFromPlaylistRoute</a></li><li><a href="module-downloadApkFileRoute.html">downloadApkFileRoute</a></li><li><a href="module-getAlbumRoutes.html">getAlbumRoutes</a></li><li><a href="module-getAlbumSongsRoutes.html">getAlbumSongsRoutes</a></li><li><a href="module-getAlbumUploadsRoutes.html">getAlbumUploadsRoutes</a></li><li><a href="module-getGenreRoutes.html">getGenreRoutes</a></li><li><a href="module-getPlaylistRoutes.html">getPlaylistRoutes</a></li><li><a href="module-getPropBasedPlaylistRoutes.html">getPropBasedPlaylistRoutes</a></li><li><a href="module-getSongRoutes.html">getSongRoutes</a></li><li><a href="module-getSongUploadsRoutes.html">getSongUploadsRoutes</a></li><li><a href="module-homePlaylistsRoute.html">homePlaylistsRoute</a></li><li><a href="module-libraryRoutes.html">libraryRoutes</a></li><li><a href="module-likedAlbumsRoutes.html">likedAlbumsRoutes</a></li><li><a href="module-likedArtistsRoutes.html">likedArtistsRoutes</a></li><li><a href="module-likedSongsRoutes.html">likedSongsRoutes</a></li><li><a href="module-likePlaylistRoute.html">likePlaylistRoute</a></li><li><a href="module-loginRoutes.html">loginRoutes</a></li><li><a href="module-playlistRoutes.html">playlistRoutes</a></li><li><a href="module-rateSongsRoutes.html">rateSongsRoutes</a></li><li><a href="module-remixesRoutes.html">remixesRoutes</a></li><li><a href="module-routers_account.html">routers/account</a></li><li><a href="module-routers_first-login.html">routers/first-login</a></li><li><a href="module-routers_password-reset.html">routers/password-reset</a></li><li><a href="module-routers_signup.html">routers/signup</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-routers_account-accountRoutes.html">accountRoutes</a></li><li><a href="module-routers_first-login-firstRoutes.html">firstRoutes</a></li><li><a href="module-routers_password-reset-passwordRoutes.html">passwordRoutes</a></li><li><a href="module-routers_signup-signupRoutes.html">signupRoutes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sun Jun 07 2020 12:50:36 GMT+0200 (Eastern European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
