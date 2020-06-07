@@ -3,9 +3,12 @@ var Schema = mongoose.Schema;
 
 var schema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
-    type: {type: String, required: true},
-    seen: {type: Boolean, default: false},
-    timeStamp: {type: String, required: true}
+    Performer:{ type: mongoose.Schema.Types.ObjectId, required: true},
+    Affected: { type: mongoose.Schema.Types.ObjectId, required: true}, 
+    Time: {type: Date, default: Date.now()},
+    Type: {type: String, required: true},
+    Object: {type: String, default: null}
+
 });
 
-module.exports = mongoose.model('Eventlog', schema);
+module.exports = mongoose.model('Event', schema);

@@ -3,11 +3,13 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
-module.exports = (req, res, next) => {
+module.exports = async (eventType, eventPerformer, eventAffected, eventObject = null) => {
     mongoose.connection.db.collection('Eventlog', function (err, collection) {
         var nEvent = new Eventlog ({
-            type: req.eventType,
-            time: Date.now(),
+            Performer: eventPerformer,
+            Affected: eventAffected,
+            Object: eventObject,
+            Type: eventType,
         });
 
         nEvent.save(function(err, result) {
@@ -15,7 +17,5 @@ module.exports = (req, res, next) => {
               throw err;
             }
         });
-
-        next();
     });
 };

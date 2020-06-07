@@ -12,12 +12,12 @@ module.exports = (req, res, next) => {
         next();
         }catch(error){
             return res.sendStatus(403).json({
-                msg: 'Unauthorized acces'
+                msg: 'Unauthorized access'
             })
         }
     } else {
         res.sendStatus(403).json({
-            msg: 'Unauthorized acces'
+            msg: 'Unauthorized access'
         })
     }
       
