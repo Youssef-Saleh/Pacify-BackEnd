@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 var schema = new Schema({
     //_id: mongoose.Schema.Types.ObjectId,
-    Performer:{ type: mongoose.Schema.Types.ObjectId, required: true},
-    Affected: { type: mongoose.Schema.Types.ObjectId, required: true}, 
+    Performer:{ type: String, required: true},
+    Affected: { type: String, required: true}, 
     Time: {type: Date, default: Date.now()},
     Type: {type: String, required: true},
     Object: {type: String, default: null}
