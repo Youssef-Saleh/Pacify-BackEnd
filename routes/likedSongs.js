@@ -11,6 +11,10 @@ const bodyParser = require('body-parser');
 const auth = require('../middlewares/token_auth');
 const premiumCheck = require('../middlewares/premium_auth');
 
+const event = require('../services/create_event');
+const getArtist = require('../services/get_artist_by_song');
+const getSong = require('../services/get_song_by_id');
+
 /**
  * liking/unlinking Song requests.
  * @module likedSongsRoutes
@@ -86,6 +90,19 @@ const likedSongsRoutes = (app, fs) => {
                 {$push:{ userId :req.userId}}
             );
         });
+
+        song = getSong.getSong(req.body.songId);
+        song.then((result) => {
+            artistName = result[0].artist
+
+            artistId = getArtist.getArtistId(artistName);
+            artistId.then( (id) => {
+                event('like', req.userId, id, req.body.songId);
+            })
+        })
+
+        
+
         res.end();
       });
     // unliking an album
@@ -119,25 +136,35 @@ const likedSongsRoutes = (app, fs) => {
                   
                 }
             });
-        mongoose.connection.db.collection('songs',function(err, collection){
-            collection.find({_id:new ObjectId (req.body.songId)}, {userId:req.userId}).toArray(function(err,docs){
-                if (err) {
-                    throw err;
-                }
-                var arr = docs[0].userId
-                if (arr.length == 0) {
-                    throw err
-                }else{
-                    collection.updateOne(
-                        {_id: new ObjectId(req.body.songId)},
-                        {$pull:{ userId :req.userId}}
-                    )
-                    
-                }
+            mongoose.connection.db.collection('songs',function(err, collection){
+                collection.find({_id:new ObjectId (req.body.songId)}, {userId:req.userId}).toArray(function(err,docs){
+                    if (err) {
+                        throw err;
+                    }
+                    var arr = docs[0].userId
+                    if (arr.length == 0) {
+                        throw err
+                    }else{
+                        collection.updateOne(
+                            {_id: new ObjectId(req.body.songId)},
+                            {$pull:{ userId :req.userId}}
+                        )
+                        
+                    }
+                });
             });
         });
-        });
-           res.end();
+
+        song = getSong.getSong(req.body.songId);
+        song.then((result) => {
+            artistName = result[0].artist
+
+            artistId = getArtist.getArtistId(artistName);
+            artistId.then( (id) => {
+                event('unlike', req.userId, id, req.body.songId);
+            })
+        })
+        res.end();
     });
 };
 
