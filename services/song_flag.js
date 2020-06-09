@@ -3,21 +3,29 @@ mongoose.connect('mongodb://localhost:27017/testpacify');
 
 var ObjectId = require('mongoose').Types.ObjectId; 
 
-module.exports = (userId, songId) => {
-    mongoose.connection.db.collection('users', function (err, collection) {
-        collection.find({ _id : new ObjectId(userId) })
-        .toArray((err, data) => {
-            if(length(data) != 0){
-                if(length(data.likedSongs != 0)){
-                    for (var i = 0; i += 1; i < length(data.likedSongs)){
-                        if(data.likedSongs[i] == songId){
-                            return true;
+var User = require('../Database Seeds/models/user')
+
+exports.songFlag = async function (userId, songId) {
+    try {
+        var flag = false
+        await User.find({ _id : new ObjectId(userId) }).then((data) => {
+            
+
+            if(data.length != 0){
+                if(data[0].likedSongs.length != 0){
+
+                    data[0].likedSongs.forEach(element => {
+                        if(element == songId){
+                            flag = true;
                         }
-                    }
+                    });
                 }
             }
-            return false;
-        });
-    });
+        })
+        return flag
+    } catch (e) {
+        // Log Errors
+        throw Error('Error while Paginating Users')
+    }
 }
     
