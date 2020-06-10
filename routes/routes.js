@@ -25,6 +25,8 @@ const libraryRoutes = require('./library');
 const homeRoutes = require('./home')
 const allPlaylists = require('./allplaylistst');
 
+const statisticsRoute = require('./songStatistics');
+
 var Song = require('../Database Seeds/models/song');
 var User = require('../Database Seeds/models/user');
 var Property = require('../Database Seeds/models/property');
@@ -61,6 +63,8 @@ const appRouter = (app, fs) => {
     libraryRoutes(app, fs);
     homeRoutes(app, fs);
     allPlaylists(app, fs);
+
+    statisticsRoute(app, fs);
 };
 
 module.exports = appRouter;
